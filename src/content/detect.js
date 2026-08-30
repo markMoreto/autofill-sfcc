@@ -157,24 +157,35 @@
     const candidates = queryAllSafe(root, 'input, select, textarea').slice(0, 500);
     const fields = {};
     const claimed = new Set();
-
-    for (const logical of logicals) {
-      let els = override ? resolveFromMap(root, override, logical) : [];
-      if (!els.length && platformMap) els = resolveFromMap(root, platformMap, logical);
-      if (!els.length) els = resolveGeneric(candidates, logical, generic, claimed);
-      els = els.filter((el) => !claimed.has(el));
-      if (els.length) {
-        fields[logical] = els;
-        els.forEach((el) => claimed.add(el));
+    const take = (logical, els) => {
+      const free = els.filter((el) => !claimed.has(el));
+      if (free.length) {
+        fields[logical] = free;
+        free.forEach((el) => claimed.add(el));
       }
+    };
+
+    // Three passes over the full field list — overrides, then platform map,
+    // then generic heuristics — so a fuzzy heuristic can never claim an
+    // element that an exact platform selector for another field owns.
+    for (const logical of logicals) {
+      if (override && !fields[logical]) take(logical, resolveFromMap(root, override, logical));
+    }
+    for (const logical of logicals) {
+      if (platformMap && !fields[logical]) take(logical, resolveFromMap(root, platformMap, logical));
+    }
+    for (const logical of logicals) {
+      if (!fields[logical]) take(logical, resolveGeneric(candidates, logical, generic, claimed));
     }
 
     // unresolved: required fields missing from groups that ARE on the page.
     const unresolved = [];
+    // A registration form is only "present" when a password field exists —
+    // a lone email input (checkout contact info, newsletter) doesn't count.
     const present = (group) =>
       Object.keys(fields).some((f) =>
         group === 'registration'
-          ? ['email', 'password', 'firstName'].includes(f)
+          ? ['password', 'passwordConfirm'].includes(f)
           : f.startsWith(group + '.'));
     for (const [group, required] of Object.entries(GROUP_REQUIRED)) {
       if (!present(group)) continue;
@@ -183,7 +194,12 @@
         if (countryMeta && countryMeta.postal.required) needed.push(`${group}.postalCode`);
         if (countryMeta && countryMeta.state.required && countryMeta.state.mode !== 'none') needed.push(`${group}.state`);
       }
-      for (const f of needed) if (!fields[f]) unresolved.push(f);
+      for (const f of needed) {
+        // A bare top-level twin (e.g. `firstName` for `shipping.firstName`)
+        // counts as resolved — single-address pages fill it once.
+        const bare = f.includes('.') ? f.slice(f.indexOf('.') + 1) : f;
+        if (!fields[f] && !fields[bare]) unresolved.push(f);
+      }
     }
 
     return { fields, unresolved };

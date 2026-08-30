@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>SFRA Checkout Fixture</title></head>
+<body>
+<div class="page" data-action="Checkout-Begin">
+  <div id="maincontent" class="container">
+
+    <!-- Shipping -->
+    <form class="checkout-shipping-form" method="POST" data-address-mode="new">
+      <div class="shipping-form" data-shipment-uuid="shipment-0001">
+        <fieldset class="shipping-address-block">
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingFirstName">First Name</label>
+            <input type="text" class="form-control shippingFirstName" id="shippingFirstName" name="dwfrm_shipping_shippingAddress_addressFields_firstName" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingLastName">Last Name</label>
+            <input type="text" class="form-control shippingLastName" id="shippingLastName" name="dwfrm_shipping_shippingAddress_addressFields_lastName" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingAddressOne">Address 1</label>
+            <input type="text" class="form-control shippingAddressOne" id="shippingAddressOne" name="dwfrm_shipping_shippingAddress_addressFields_address1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="shippingAddressTwo">Address 2</label>
+            <input type="text" class="form-control shippingAddressTwo" id="shippingAddressTwo" name="dwfrm_shipping_shippingAddress_addressFields_address2">
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingCountry">Country</label>
+            <select class="form-control shippingCountry custom-select" id="shippingCountry" name="dwfrm_shipping_shippingAddress_addressFields_country" required>
+              <option value="">Select...</option>
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="GB">United Kingdom</option>
+              <option value="DE">Germany</option>
+              <option value="AU">Australia</option>
+              <option value="JP">Japan</option>
+            </select>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingState">State</label>
+            <select class="form-control shippingState custom-select" id="shippingState" name="dwfrm_shipping_shippingAddress_addressFields_states_stateCode" required>
+              <option value="">Select...</option>
+            </select>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingAddressCity">City</label>
+            <input type="text" class="form-control shippingAddressCity" id="shippingAddressCity" name="dwfrm_shipping_shippingAddress_addressFields_city" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingZipCode">Zip Code</label>
+            <input type="text" class="form-control shippingZipCode" id="shippingZipCode" name="dwfrm_shipping_shippingAddress_addressFields_postalCode" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="shippingPhoneNumber">Phone Number</label>
+            <input type="tel" class="form-control shippingPhoneNumber" id="shippingPhoneNumber" name="dwfrm_shipping_shippingAddress_addressFields_phone" required>
+          </div>
+        </fieldset>
+      </div>
+    </form>
+
+    <!-- Billing / Payment -->
+    <div class="checkout-billing">
+      <form class="payment-form" method="POST">
+        <fieldset class="address-selector-block">
+          <div class="form-group custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="shippingAsBilling" name="dwfrm_billing_shippingAddressUseAsBillingAddress" checked>
+            <label class="custom-control-label" for="shippingAsBilling">Same as shipping address</label>
+          </div>
+        </fieldset>
+        <fieldset class="billing-address-block">
+          <div class="form-group required">
+            <label class="form-control-label" for="billingFirstName">First Name</label>
+            <input type="text" class="form-control billingFirstName" id="billingFirstName" name="dwfrm_billing_addressFields_firstName" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="billingLastName">Last Name</label>
+            <input type="text" class="form-control billingLastName" id="billingLastName" name="dwfrm_billing_addressFields_lastName" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="billingAddressOne">Address 1</label>
+            <input type="text" class="form-control billingAddressOne" id="billingAddressOne" name="dwfrm_billing_addressFields_address1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="billingAddressTwo">Address 2</label>
+            <input type="text" class="form-control billingAddressTwo" id="billingAddressTwo" name="dwfrm_billing_addressFields_address2">
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="billingCountry">Country</label>
+            <select class="form-control billingCountry custom-select" id="billingCountry" name="dwfrm_billing_addressFields_country" required>
+              <option value="">Select...</option>
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="GB">United Kingdom</option>
+              <option value="DE">Germany</option>
+              <option value="AU">Australia</option>
+              <option value="JP">Japan</option>
+            </select>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="billingState">State</label>
+            <select class="form-control billingState custom-select" id="billingState" name="dwfrm_billing_addressFields_states_stateCode" required>
+              <option value="">Select...</option>
+            </select>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="billingAddressCity">City</label>
+            <input type="text" class="form-control billingAddressCity" id="billingAddressCity" name="dwfrm_billing_addressFields_city" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="billingZipCode">Zip Code</label>
+            <input type="text" class="form-control billingZipCode" id="billingZipCode" name="dwfrm_billing_addressFields_postalCode" required>
+          </div>
+        </fieldset>
+
+        <fieldset class="contact-info-block">
+          <div class="form-group required">
+            <label class="form-control-label" for="email">Email</label>
+            <input type="email" class="form-control email" id="email" name="dwfrm_billing_contactInfoFields_email" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="phoneNumber">Phone Number</label>
+            <input type="tel" class="form-control phone" id="phoneNumber" name="dwfrm_billing_contactInfoFields_phone" required>
+          </div>
+        </fieldset>
+
+        <fieldset class="credit-card-form">
+          <input type="hidden" id="cardType" name="dwfrm_billing_creditCardFields_cardType" value="">
+          <div class="form-group required">
+            <label class="form-control-label" for="cardOwner">Name on Card</label>
+            <input type="text" class="form-control" id="cardOwner" name="dwfrm_billing_creditCardFields_cardOwner" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="cardNumber">Card Number</label>
+            <input type="text" class="form-control" id="cardNumber" name="dwfrm_billing_creditCardFields_cardNumber" maxlength="23" required>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="expirationMonth">Month</label>
+            <select class="form-control" id="expirationMonth" name="dwfrm_billing_creditCardFields_expirationMonth" required>
+              <option value="">Month</option>
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+              <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+              <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+            </select>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="expirationYear">Year</label>
+            <select class="form-control" id="expirationYear" name="dwfrm_billing_creditCardFields_expirationYear" required>
+              <option value="">Year</option>
+              <option value="2026">2026</option><option value="2027">2027</option>
+              <option value="2028">2028</option><option value="2029">2029</option>
+              <option value="2030">2030</option><option value="2031">2031</option>
+            </select>
+          </div>
+          <div class="form-group required">
+            <label class="form-control-label" for="securityCode">Security Code</label>
+            <input type="text" class="form-control" id="securityCode" name="dwfrm_billing_creditCardFields_securityCode" maxlength="4" required>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mock of SFRA's country -> state option reload (async, like the AJAX round trip).
+(function () {
+  var STATES = {
+    US: { CA: 'California', NY: 'New York' },
+    CA: { ON: 'Ontario', QC: 'Quebec' },
+    AU: { NSW: 'New South Wales', VIC: 'Victoria' },
+    JP: { Tokyo: 'Tokyo' },
+    GB: null, // GB removes the state select
+    DE: null
+  };
+  function wire(countryId, stateId) {
+    var country = document.getElementById(countryId);
+    if (!country) return;
+    country.addEventListener('change', function () {
+      var state = document.getElementById(stateId);
+      if (!state) return;
+      setTimeout(function () {
+        var states = STATES[country.value];
+        if (!states) {
+          state.closest('.form-group').setAttribute('style', 'display:none');
+          state.innerHTML = '<option value=""></option>';
+          return;
+        }
+        state.closest('.form-group').removeAttribute('style');
+        var html = '<option value="">Select...</option>';
+        Object.keys(states).forEach(function (code) {
+          html += '<option value="' + code + '">' + states[code] + '</option>';
+        });
+        state.innerHTML = html;
+      }, 80);
+    });
+  }
+  wire('shippingCountry', 'shippingState');
+  wire('billingCountry', 'billingState');
+})();
+</script>
+</body>
+</html>

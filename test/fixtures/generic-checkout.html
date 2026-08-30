@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Generic (Unknown Platform) Checkout Fixture</title></head>
+<body>
+<main>
+  <section class="delivery-section">
+    <h2>Shipping</h2>
+    <label>First name <input type="text" name="fname" autocomplete="given-name"></label>
+    <label>Last name <input type="text" name="lname" autocomplete="family-name"></label>
+    <label>Street address <input type="text" name="street" autocomplete="address-line1"></label>
+    <label>Apartment <input type="text" name="apt" autocomplete="address-line2"></label>
+    <label>Town <input type="text" name="town" autocomplete="address-level2"></label>
+    <label>Postcode <input type="text" name="pc" autocomplete="postal-code"></label>
+    <label>Country
+      <select name="nation" autocomplete="country">
+        <option value="">--</option>
+        <option value="GB">United Kingdom</option>
+        <option value="US">United States</option>
+      </select>
+    </label>
+    <label>Telephone <input type="text" name="contactnum" autocomplete="tel"></label>
+    <label>E-mail <input type="text" name="contactemail" autocomplete="email"></label>
+  </section>
+
+  <section class="payment-section">
+    <h2>Payment</h2>
+    <!-- no autocomplete attrs here: exercises token + label heuristics -->
+    <label>Name on card <input type="text" name="nameoncard"></label>
+    <label>Card number <input type="text" name="pan"></label>
+    <label>Expiration <input type="text" name="ccexp" placeholder="MM / YY"></label>
+    <label>CVC <input type="text" name="cvc" maxlength="4"></label>
+    <div class="billing-details">
+      <h3>Billing address</h3>
+      <label>Street <input type="text" name="billstreet"></label>
+      <label>City <input type="text" name="billcity"></label>
+      <label>Zip <input type="text" name="billzip"></label>
+    </div>
+  </section>
+</main>
+</body>
+</html>

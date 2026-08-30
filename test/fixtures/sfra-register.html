@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>SFRA Register Fixture</title></head>
+<body>
+<div class="page" data-action="Account-SubmitRegistration">
+  <div id="maincontent">
+    <form class="registration" method="POST" action="/on/demandware.store/Sites-RefArch-Site/en_US/Account-SubmitRegistration" data-action-url="/account">
+      <div class="form-group required">
+        <label class="form-control-label" for="registration-form-fname">First Name</label>
+        <input type="text" class="form-control" id="registration-form-fname" name="dwfrm_profile_customer_firstname" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="registration-form-lname">Last Name</label>
+        <input type="text" class="form-control" id="registration-form-lname" name="dwfrm_profile_customer_lastname" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="registration-form-phone">Phone Number</label>
+        <input type="tel" class="form-control" id="registration-form-phone" name="dwfrm_profile_customer_phone" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="registration-form-email">Email</label>
+        <input type="email" class="form-control" id="registration-form-email" name="dwfrm_profile_customer_email" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="registration-form-email-confirm">Confirm Email</label>
+        <input type="email" class="form-control" id="registration-form-email-confirm" name="dwfrm_profile_customer_emailconfirm" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="registration-form-password">Password</label>
+        <input type="password" class="form-control" id="registration-form-password" name="dwfrm_profile_login_password" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="registration-form-password-confirm">Confirm Password</label>
+        <input type="password" class="form-control" id="registration-form-password-confirm" name="dwfrm_profile_login_passwordconfirm" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+
+    <form class="login" method="POST" action="/on/demandware.store/Sites-RefArch-Site/en_US/Account-Login">
+      <div class="form-group required">
+        <label class="form-control-label" for="login-form-email">Email</label>
+        <input type="email" id="login-form-email" class="form-control" name="loginEmail" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="login-form-password">Password</label>
+        <input type="password" id="login-form-password" class="form-control" name="loginPassword" required>
+      </div>
+      <button type="submit" class="btn btn-block btn-primary">Login</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

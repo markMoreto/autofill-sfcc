@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>SFRA Address Book Fixture</title></head>
+<body>
+<div class="page" data-action="Address-AddAddress">
+  <div id="maincontent">
+    <form class="address-form" method="POST" action="/on/demandware.store/Sites-RefArch-Site/en_US/Address-SaveAddress">
+      <div class="form-group required">
+        <label class="form-control-label" for="addressId">Address Name</label>
+        <input type="text" class="form-control" id="addressId" name="dwfrm_address_addressId" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" name="dwfrm_address_firstName" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" name="dwfrm_address_lastName" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="address1">Address 1</label>
+        <input type="text" class="form-control" id="address1" name="dwfrm_address_address1" required>
+      </div>
+      <div class="form-group">
+        <label class="form-control-label" for="address2">Address 2</label>
+        <input type="text" class="form-control" id="address2" name="dwfrm_address_address2">
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="country">Country</label>
+        <select class="form-control custom-select" id="country" name="dwfrm_address_country" required>
+          <option value="">Select...</option>
+          <option value="US">United States</option>
+          <option value="GB">United Kingdom</option>
+        </select>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="state">State</label>
+        <select class="form-control custom-select" id="state" name="dwfrm_address_states_stateCode" required>
+          <option value="">Select...</option>
+          <option value="CA">California</option>
+          <option value="NY">New York</option>
+        </select>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="city">City</label>
+        <input type="text" class="form-control" id="city" name="dwfrm_address_city" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="zipCode">Zip Code</label>
+        <input type="text" class="form-control" id="zipCode" name="dwfrm_address_postalCode" required>
+      </div>
+      <div class="form-group required">
+        <label class="form-control-label" for="phone">Phone Number</label>
+        <input type="tel" class="form-control" id="phone" name="dwfrm_address_phone" required>
+      </div>
+      <div class="form-group custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="setDefaultAddress" name="dwfrm_address_setAsDefault">
+        <label class="custom-control-label" for="setDefaultAddress">Set as default</label>
+      </div>
+      <button type="submit" class="btn btn-save btn-block btn-primary">Save</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -1,16 +1,18 @@
 // Re-vendors libphonenumber-js into the extension source tree.
 // Run after `npm install` whenever the dependency is upgraded:
 //   npm run vendor:phone
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-copyFileSync(
+// Strip the sourceMappingURL comment — the map is not vendored.
+const bundle = readFileSync(
   join(root, 'node_modules/libphonenumber-js/bundle/libphonenumber-min.js'),
-  join(root, 'src/lib/libphonenumber.min.js')
-);
+  'utf8'
+).replace(/\/\/#\s*sourceMappingURL=\S+\s*$/, '');
+writeFileSync(join(root, 'src/lib/libphonenumber.min.js'), bundle);
 
 // Trim the example-numbers metadata to the countries the extension ships.
 const countries = JSON.parse(

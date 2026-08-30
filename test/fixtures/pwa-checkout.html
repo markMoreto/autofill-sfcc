@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>PWA Kit Checkout Fixture</title></head>
+<body>
+<div id="root">
+  <div data-testid="sf-checkout-container" class="chakra-container">
+
+    <form data-testid="sf-checkout-shipping-address-form" class="chakra-form">
+      <input class="chakra-input" type="text" name="firstName" placeholder="First Name">
+      <input class="chakra-input" type="text" name="lastName" placeholder="Last Name">
+      <input class="chakra-input" type="tel" name="phone" placeholder="Phone">
+      <select class="chakra-select" name="countryCode">
+        <option value="">Country</option>
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+      </select>
+      <input class="chakra-input" type="text" name="address1" placeholder="Address">
+      <input class="chakra-input" type="text" name="city" placeholder="City">
+      <select class="chakra-select" name="stateCode">
+        <option value="">State</option>
+        <option value="CA">California</option>
+        <option value="NY">New York</option>
+      </select>
+      <input class="chakra-input" type="text" name="postalCode" placeholder="Zip Code">
+    </form>
+
+    <div data-testid="sf-checkout-billing-address">
+      <input class="chakra-checkbox__input" type="checkbox" name="billingSameAsShipping" checked>
+      <input class="chakra-input" type="text" name="firstName" placeholder="First Name">
+      <input class="chakra-input" type="text" name="lastName" placeholder="Last Name">
+      <input class="chakra-input" type="text" name="address1" placeholder="Address">
+      <input class="chakra-input" type="text" name="city" placeholder="City">
+      <select class="chakra-select" name="stateCode">
+        <option value="">State</option>
+        <option value="CA">California</option>
+      </select>
+      <input class="chakra-input" type="text" name="postalCode" placeholder="Zip Code">
+      <select class="chakra-select" name="countryCode">
+        <option value="">Country</option>
+        <option value="US">United States</option>
+      </select>
+    </div>
+
+    <form data-testid="sf-checkout-payment-form">
+      <input class="chakra-input" type="text" name="number" placeholder="Card Number">
+      <input class="chakra-input" type="text" name="holder" placeholder="Name on Card">
+      <input class="chakra-input" type="text" name="expiry" placeholder="MM/YY" maxlength="5">
+      <input class="chakra-input" type="password" name="securityCode" placeholder="Security Code" maxlength="4">
+    </form>
+  </div>
+</div>
+</body>
+</html>
