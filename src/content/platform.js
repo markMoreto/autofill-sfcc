@@ -10,7 +10,7 @@
     // SFRA: reference-architecture markup / data attributes.
     if (
       d.querySelector(
-        'form.registration, form.checkout-shipping-form, .checkout-billing, [data-action-url], .veil .spinner'
+        'form.registration, form.checkout-shipping-form, #checkout-main, [data-action-url], .veil .spinner'
       ) ||
       d.querySelector('.page[data-action]') ||
       (d.querySelector('#maincontent') && d.querySelector('.header-banner'))
