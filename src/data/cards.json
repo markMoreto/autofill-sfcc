@@ -1,0 +1,116 @@
+{
+  "$comment": "All numbers come from vendor PUBLIC test-card documentation (docUrl, checked on `docCheckedOn`). Sandbox/test environments only — none of these bypass fraud or 3DS in production. Re-verify against docUrl when a vendor integration changes; see docs/MAINTENANCE.md#adding-or-updating-a-test-card. `expiry.month/year: null` means 'any future date'. Entries with type 'instructions' cannot be filled from a content script; the popup shows the steps instead.",
+  "vendors": [
+    {
+      "id": "adyen",
+      "name": "Adyen",
+      "docUrl": "https://docs.adyen.com/development-resources/test-cards-and-credentials/test-card-numbers",
+      "docCheckedOn": "2026-08-31",
+      "iframeNote": "Drop-in/Components render card fields in *.adyen.com iframes; filling is best-effort (typing simulation), with copy-to-clipboard fallback.",
+      "cards": [
+        { "id": "adyen-visa", "brand": "Visa", "number": "4111111111111111", "expiry": { "month": "03", "year": "2030" }, "cvv": "737", "expectedResult": "approved" },
+        { "id": "adyen-mc", "brand": "Mastercard", "number": "5555555555554444", "expiry": { "month": "03", "year": "2030" }, "cvv": "737", "expectedResult": "approved" },
+        { "id": "adyen-amex", "brand": "Amex", "number": "370000000000002", "expiry": { "month": "03", "year": "2030" }, "cvv": "7373", "expectedResult": "approved" },
+        { "id": "adyen-3ds2", "brand": "Visa", "number": "4917610000000000", "expiry": { "month": "03", "year": "2030" }, "cvv": "737", "expectedResult": "3ds-challenge", "notes": "Enrolled in 3D Secure 2." }
+      ]
+    },
+    {
+      "id": "authorizenet",
+      "name": "Authorize.net",
+      "docUrl": "https://developer.authorize.net/hello_world/testing_guide.html",
+      "docCheckedOn": "2026-08-31",
+      "cards": [
+        { "id": "anet-visa", "brand": "Visa", "number": "4111111111111111", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved", "notes": "Any future expiry, any CVV." },
+        { "id": "anet-visa13", "brand": "Visa (13-digit)", "number": "4007000000027", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "anet-mc", "brand": "Mastercard", "number": "5424000000000015", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "anet-amex", "brand": "Amex", "number": "370000000000002", "expiry": { "month": null, "year": null }, "cvv": "1234", "expectedResult": "approved" },
+        { "id": "anet-discover", "brand": "Discover", "number": "6011000000000012", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "anet-decline-zip", "brand": "Visa", "number": "4111111111111111", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "declined", "notes": "Submit with billing ZIP 46282 to force a decline." }
+      ]
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe",
+      "docUrl": "https://docs.stripe.com/testing",
+      "docCheckedOn": "2026-08-31",
+      "iframeNote": "Stripe Elements render in js.stripe.com iframes.",
+      "cards": [
+        { "id": "stripe-visa", "brand": "Visa", "number": "4242424242424242", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "stripe-mc", "brand": "Mastercard", "number": "5555555555554444", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "stripe-amex", "brand": "Amex", "number": "378282246310005", "expiry": { "month": null, "year": null }, "cvv": "1234", "expectedResult": "approved" },
+        { "id": "stripe-3ds", "brand": "Visa", "number": "4000000000003220", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "3ds-challenge", "notes": "3D Secure authentication required." },
+        { "id": "stripe-decline", "brand": "Visa", "number": "4000000000000002", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "declined", "notes": "generic_decline." }
+      ]
+    },
+    {
+      "id": "braintree",
+      "name": "Braintree / PayPal",
+      "docUrl": "https://developer.paypal.com/braintree/docs/reference/general/testing/",
+      "docCheckedOn": "2026-08-31",
+      "iframeNote": "Hosted Fields render in *.braintreegateway.com iframes.",
+      "cards": [
+        { "id": "bt-visa", "brand": "Visa", "number": "4111111111111111", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "bt-mc", "brand": "Mastercard", "number": "5555555555554444", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "bt-amex", "brand": "Amex", "number": "378282246310005", "expiry": { "month": null, "year": null }, "cvv": "1234", "expectedResult": "approved" },
+        { "id": "bt-decline", "brand": "Visa", "number": "4000111111111115", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "declined", "notes": "Processor-declined test number." }
+      ]
+    },
+    {
+      "id": "cybersource",
+      "name": "Cybersource",
+      "docUrl": "https://developer.cybersource.com/hello-world/testing-guide-v1.html",
+      "docCheckedOn": "2026-08-31",
+      "iframeNote": "Flex Microform renders in flex.cybersource.com iframes.",
+      "cards": [
+        { "id": "cs-visa", "brand": "Visa", "number": "4111111111111111", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "cs-mc", "brand": "Mastercard", "number": "5555555555554444", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "cs-amex", "brand": "Amex", "number": "378282246310005", "expiry": { "month": null, "year": null }, "cvv": "1234", "expectedResult": "approved" }
+      ]
+    },
+    {
+      "id": "worldpay",
+      "name": "Worldpay",
+      "docUrl": "https://developer.worldpay.com/docs/wpg/reference/testvalues",
+      "docCheckedOn": "2026-08-31",
+      "cards": [
+        { "id": "wp-visa", "brand": "Visa", "number": "4444333322221111", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" },
+        { "id": "wp-mc", "brand": "Mastercard", "number": "5555555555554444", "expiry": { "month": null, "year": null }, "cvv": "123", "expectedResult": "approved" }
+      ]
+    },
+    {
+      "id": "checkoutcom",
+      "name": "Checkout.com",
+      "docUrl": "https://www.checkout.com/docs/developer-resources/testing/test-cards",
+      "docCheckedOn": "2026-08-31",
+      "iframeNote": "Frames render in *.checkout.com iframes.",
+      "cards": [
+        { "id": "cko-visa", "brand": "Visa", "number": "4242424242424242", "expiry": { "month": null, "year": null }, "cvv": "100", "expectedResult": "approved" },
+        { "id": "cko-3ds", "brand": "Visa", "number": "4543474002249996", "expiry": { "month": null, "year": null }, "cvv": "956", "expectedResult": "3ds-challenge" }
+      ]
+    },
+    {
+      "id": "klarna",
+      "name": "Klarna",
+      "type": "instructions",
+      "docUrl": "https://docs.klarna.com/resources/developer-tools/sample-data/sample-customer-data/",
+      "docCheckedOn": "2026-08-31",
+      "instructions": "Klarna has no test card. Use the sandbox test personas from the doc link (per-country sample customer data — email/OTP flows in the Klarna widget). The extension fills contact and address fields only."
+    },
+    {
+      "id": "applepay",
+      "name": "Apple Pay",
+      "type": "instructions",
+      "docUrl": "https://developer.apple.com/apple-pay/sandbox-testing/",
+      "docCheckedOn": "2026-08-31",
+      "instructions": "Not fillable from a content script. Sign into the device with an Apple sandbox tester account, add Apple's sandbox test cards to Wallet, then complete the sheet manually. The extension fills contact/shipping fields only."
+    },
+    {
+      "id": "googlepay",
+      "name": "Google Pay",
+      "type": "instructions",
+      "docUrl": "https://developers.google.com/pay/api/web/guides/test-and-deploy/integration-checklist",
+      "docCheckedOn": "2026-08-31",
+      "instructions": "Not fillable from a content script. In TEST environment Google Pay returns dummy tokens for any card in the account. The extension fills contact/shipping fields only."
+    }
+  ]
+}

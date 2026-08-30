@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SFCC QA Autofill</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <h1>SFCC QA Autofill</h1>
+    <button id="open-options" class="link" title="Options">⚙</button>
+  </header>
+
+  <section class="grid">
+    <label>Country
+      <select id="country"></select>
+    </label>
+    <label>Address
+      <select id="address"></select>
+    </label>
+    <label>Card vendor
+      <select id="vendor"></select>
+    </label>
+    <label>Card
+      <select id="card"></select>
+    </label>
+    <label>Profile
+      <select id="profileMode">
+        <option value="registered">Registered</option>
+        <option value="guest">Guest</option>
+      </select>
+    </label>
+    <label>Phone format
+      <select id="phoneFormat">
+        <option value="national">National</option>
+        <option value="e164">E.164 (+CC…)</option>
+      </select>
+    </label>
+  </section>
+
+  <section class="checks">
+    <label><input type="checkbox" id="billingSameAsShipping"> Billing same as shipping</label>
+    <label><input type="checkbox" id="stressNames"> Stress-test names (O'Brien, Müller…)</label>
+  </section>
+
+  <section class="actions">
+    <button id="fill-all" class="primary">Fill everything</button>
+    <div class="row">
+      <button id="fill-address">Address</button>
+      <button id="fill-card-btn">Card</button>
+      <button id="fill-registration">Registration</button>
+      <button id="fill-login">Login</button>
+    </div>
+  </section>
+
+  <section id="instructions" class="panel" hidden></section>
+  <section id="cardcopy" class="panel" hidden></section>
+
+  <section id="result" class="panel" hidden>
+    <div id="result-summary"></div>
+    <details id="result-filled"><summary></summary><ul></ul></details>
+    <details id="result-skipped"><summary></summary><ul></ul></details>
+    <details id="result-unresolved" class="warn"><summary></summary><ul></ul>
+      <p class="hint">Missing fields? Create a per-site override: pick the logical field below, then click the input on the page.</p>
+    </details>
+  </section>
+
+  <footer>
+    <select id="picker-field" title="Logical field to map">
+      <option value="">Map a field…</option>
+    </select>
+    <button id="picker-start" disabled>Pick on page</button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

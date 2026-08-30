@@ -1,0 +1,98 @@
+{
+  "$comment": "Curated public, deliverable addresses (government buildings, museums, landmarks — never private residences). `verified` is filled ONLY by running scripts/verify-addresses.md; every entry ships as a candidate (verified: null). When a validator returns a corrected/normalized form, replace the fields with that form so re-validation returns 'no change'. See docs/MAINTENANCE.md#adding-or-verifying-an-address.",
+  "addresses": {
+    "US": [
+      { "id": "us-apple-park", "label": "Apple Park (Cupertino, CA)", "address1": "1 Apple Park Way", "address2": "", "city": "Cupertino", "state": "CA", "postalCode": "95014", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "us-googleplex", "label": "Googleplex (Mountain View, CA)", "address1": "1600 Amphitheatre Pkwy", "address2": "", "city": "Mountain View", "state": "CA", "postalCode": "94043", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "us-empire-state", "label": "Empire State Building (New York, NY)", "address1": "20 W 34th St", "address2": "", "city": "New York", "state": "NY", "postalCode": "10001", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "CA": [
+      { "id": "ca-toronto-city-hall", "label": "Toronto City Hall", "address1": "100 Queen St W", "address2": "", "city": "Toronto", "state": "ON", "postalCode": "M5H 2N2", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "ca-cn-tower", "label": "CN Tower (Toronto)", "address1": "290 Bremner Blvd", "address2": "", "city": "Toronto", "state": "ON", "postalCode": "M5V 3L9", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "MX": [
+      { "id": "mx-reforma-222", "label": "Torre Reforma 222 (CDMX)", "address1": "Paseo de la Reforma 222", "address2": "Juárez", "city": "Ciudad de México", "state": "CMX", "postalCode": "06600", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "mx-unam", "label": "UNAM Ciudad Universitaria (CDMX)", "address1": "Av. Insurgentes Sur 3000", "address2": "Coyoacán", "city": "Ciudad de México", "state": "CMX", "postalCode": "04510", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "BR": [
+      { "id": "br-masp", "label": "MASP (São Paulo)", "address1": "Av. Paulista 1578", "address2": "Bela Vista", "city": "São Paulo", "state": "SP", "postalCode": "01310-200", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "br-museu-amanha", "label": "Museu do Amanhã (Rio de Janeiro)", "address1": "Praça Mauá 1", "address2": "Centro", "city": "Rio de Janeiro", "state": "RJ", "postalCode": "20081-240", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — confirm CEP during verification" } }
+    ],
+    "AR": [
+      { "id": "ar-casa-rosada", "label": "Casa Rosada (Buenos Aires)", "address1": "Balcarce 50", "address2": "", "city": "Buenos Aires", "state": "C", "postalCode": "C1064AAB", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — confirm CPA suffix during verification" } },
+      { "id": "ar-teatro-san-martin", "label": "Teatro San Martín (Buenos Aires)", "address1": "Av. Corrientes 1530", "address2": "", "city": "Buenos Aires", "state": "C", "postalCode": "C1042AAO", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — confirm CPA suffix during verification" } }
+    ],
+    "GB": [
+      { "id": "gb-downing-st", "label": "10 Downing Street (London)", "address1": "10 Downing St", "address2": "", "city": "London", "state": "", "postalCode": "SW1A 2AA", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "gb-birmingham", "label": "Bennett's Hill (Birmingham)", "address1": "8 Bennett's Hill", "address2": "", "city": "Birmingham", "state": "", "postalCode": "B2 5RS", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "DE": [
+      { "id": "de-reichstag", "label": "Reichstag (Berlin)", "address1": "Platz der Republik 1", "address2": "", "city": "Berlin", "state": "", "postalCode": "11011", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "de-rathaus-muenchen", "label": "Neues Rathaus (München)", "address1": "Marienplatz 8", "address2": "", "city": "München", "state": "", "postalCode": "80331", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "FR": [
+      { "id": "fr-eiffel", "label": "Tour Eiffel (Paris)", "address1": "5 Avenue Anatole France", "address2": "", "city": "Paris", "state": "", "postalCode": "75007", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "fr-louvre", "label": "Musée du Louvre (Paris)", "address1": "99 Rue de Rivoli", "address2": "", "city": "Paris", "state": "", "postalCode": "75001", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "IT": [
+      { "id": "it-colosseo", "label": "Colosseo (Roma)", "address1": "Piazza del Colosseo 1", "address2": "", "city": "Roma", "state": "RM", "postalCode": "00184", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "it-montenapoleone", "label": "Via Montenapoleone (Milano)", "address1": "Via Montenapoleone 8", "address2": "", "city": "Milano", "state": "MI", "postalCode": "20121", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "ES": [
+      { "id": "es-circulo-bellas-artes", "label": "Círculo de Bellas Artes (Madrid)", "address1": "Calle de Alcalá 42", "address2": "", "city": "Madrid", "state": "M", "postalCode": "28014", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "es-casa-batllo", "label": "Casa Batlló (Barcelona)", "address1": "Passeig de Gràcia 43", "address2": "", "city": "Barcelona", "state": "B", "postalCode": "08007", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "NL": [
+      { "id": "nl-rijksmuseum", "label": "Rijksmuseum (Amsterdam)", "address1": "Museumstraat 1", "address2": "", "city": "Amsterdam", "state": "", "postalCode": "1071 XX", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "nl-binnenhof", "label": "Binnenhof (Den Haag)", "address1": "Binnenhof 1A", "address2": "", "city": "Den Haag", "state": "", "postalCode": "2513 AA", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "AU": [
+      { "id": "au-opera-house", "label": "Sydney Opera House", "address1": "Bennelong Point", "address2": "", "city": "Sydney", "state": "NSW", "postalCode": "2000", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "au-state-library-vic", "label": "State Library Victoria (Melbourne)", "address1": "328 Swanston St", "address2": "", "city": "Melbourne", "state": "VIC", "postalCode": "3000", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "NZ": [
+      { "id": "nz-te-papa", "label": "Te Papa Museum (Wellington)", "address1": "55 Cable St", "address2": "Te Aro", "city": "Wellington", "state": "", "postalCode": "6011", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "nz-auckland-uni", "label": "University of Auckland", "address1": "22 Symonds St", "address2": "", "city": "Auckland", "state": "", "postalCode": "1010", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "JP": [
+      { "id": "jp-imperial-palace", "label": "Imperial Palace area (Tokyo)", "address1": "1-1 Chiyoda", "address2": "Chiyoda-ku", "city": "Tokyo", "state": "Tokyo", "postalCode": "100-8111", "unicode": { "address1": "千代田1-1", "address2": "千代田区", "city": "東京都" }, "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "jp-tokyo-tower", "label": "Tokyo Tower", "address1": "4-2-8 Shibakoen", "address2": "Minato-ku", "city": "Tokyo", "state": "Tokyo", "postalCode": "105-0011", "unicode": { "address1": "芝公園4-2-8", "address2": "港区", "city": "東京都" }, "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "KR": [
+      { "id": "kr-gyeongbokgung", "label": "Gyeongbokgung Palace (Seoul)", "address1": "161 Sajik-ro", "address2": "Jongno-gu", "city": "Seoul", "state": "Seoul", "postalCode": "03045", "unicode": { "address1": "사직로 161", "address2": "종로구", "city": "서울특별시" }, "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "kr-lotte-world-tower", "label": "Lotte World Tower (Seoul)", "address1": "300 Olympic-ro", "address2": "Songpa-gu", "city": "Seoul", "state": "Seoul", "postalCode": "05551", "unicode": { "address1": "올림픽로 300", "address2": "송파구", "city": "서울특별시" }, "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "SG": [
+      { "id": "sg-fullerton", "label": "The Fullerton Hotel", "address1": "1 Fullerton Square", "address2": "", "city": "Singapore", "state": "", "postalCode": "049178", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "sg-mbs", "label": "Marina Bay Sands", "address1": "10 Bayfront Ave", "address2": "", "city": "Singapore", "state": "", "postalCode": "018956", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "IN": [
+      { "id": "in-taj-mumbai", "label": "Taj Mahal Palace (Mumbai)", "address1": "Apollo Bunder", "address2": "Colaba", "city": "Mumbai", "state": "Maharashtra", "postalCode": "400001", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "in-connaught-delhi", "label": "Connaught Place (New Delhi)", "address1": "1 Connaught Place", "address2": "", "city": "New Delhi", "state": "Delhi", "postalCode": "110001", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "AE": [
+      { "id": "ae-burj-khalifa", "label": "Burj Khalifa (Dubai)", "address1": "1 Sheikh Mohammed bin Rashid Blvd", "address2": "Downtown Dubai", "city": "Dubai", "state": "Dubai", "postalCode": "", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — UAE has no postal codes; 00000 is auto-filled only when the form requires it" } },
+      { "id": "ae-louvre-abu-dhabi", "label": "Louvre Abu Dhabi", "address1": "Saadiyat Cultural District", "address2": "Saadiyat Island", "city": "Abu Dhabi", "state": "Abu Dhabi", "postalCode": "", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "SA": [
+      { "id": "sa-kingdom-centre", "label": "Kingdom Centre (Riyadh)", "address1": "2239 Al Urubah Rd", "address2": "Olaya", "city": "Riyadh", "state": "Riyadh", "postalCode": "12214", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — confirm 5-digit code + 4-digit additional during verification" } },
+      { "id": "sa-jeddah-corniche", "label": "Jeddah Corniche", "address1": "4356 Corniche Rd", "address2": "Ash Shati", "city": "Jeddah", "state": "Makkah", "postalCode": "23413", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "QA": [
+      { "id": "qa-mia", "label": "Museum of Islamic Art (Doha)", "address1": "Corniche Promenade", "address2": "", "city": "Doha", "state": "", "postalCode": "", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — Qatar has no postal codes; 00000 auto-filled only when required" } },
+      { "id": "qa-katara", "label": "Katara Cultural Village (Doha)", "address1": "Katara Cultural Village, Building 12", "address2": "West Bay", "city": "Doha", "state": "", "postalCode": "", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "IL": [
+      { "id": "il-tlv-museum", "label": "Tel Aviv Museum of Art", "address1": "27 Shaul Hamelech Blvd", "address2": "", "city": "Tel Aviv", "state": "", "postalCode": "6423906", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "il-israel-museum", "label": "The Israel Museum (Jerusalem)", "address1": "11 Derech Ruppin", "address2": "", "city": "Jerusalem", "state": "", "postalCode": "9171002", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — confirm 7-digit code during verification" } }
+    ],
+    "ZA": [
+      { "id": "za-va-waterfront", "label": "V&A Waterfront (Cape Town)", "address1": "19 Dock Rd", "address2": "Victoria & Alfred Waterfront", "city": "Cape Town", "state": "Western Cape", "postalCode": "8001", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } },
+      { "id": "za-sandton", "label": "Nelson Mandela Square (Sandton)", "address1": "5th St & Maude St", "address2": "Sandton", "city": "Johannesburg", "state": "Gauteng", "postalCode": "2196", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ],
+    "NG": [
+      { "id": "ng-tbs-lagos", "label": "Tafawa Balewa Square (Lagos)", "address1": "1 Tafawa Balewa Square", "address2": "Lagos Island", "city": "Lagos", "state": "Lagos", "postalCode": "102273", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate — confirm postcode during verification" } },
+      { "id": "ng-transcorp-abuja", "label": "Transcorp Hilton (Abuja)", "address1": "1 Aguiyi Ironsi St", "address2": "Maitama", "city": "Abuja", "state": "Abuja (FCT)", "postalCode": "900001", "verified": { "avatax": null, "googleAddressValidation": null, "verifiedOn": null, "notes": "candidate" } }
+    ]
+  }
+}

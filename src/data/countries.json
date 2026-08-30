@@ -1,0 +1,146 @@
+{
+  "$comment": "Country metadata + address format rules. See docs/MAINTENANCE.md#adding-a-country. `state.mode`: 'code' = storefront selects usually expect a state/province code, 'name' = usually a name, 'none' = no state field expected. `states` maps codes to names for select-option matching; it only needs the codes used by bundled/custom addresses.",
+  "countries": [
+    {
+      "code": "US", "name": "United States", "region": "North America", "dialCode": "+1",
+      "postal": { "required": true, "regex": "^\\d{5}(-\\d{4})?$", "example": "95014" },
+      "state": { "mode": "code", "required": true },
+      "states": { "CA": "California", "NY": "New York" }
+    },
+    {
+      "code": "CA", "name": "Canada", "region": "North America", "dialCode": "+1",
+      "postal": { "required": true, "regex": "^[A-Za-z]\\d[A-Za-z] ?\\d[A-Za-z]\\d$", "example": "M5H 2N2" },
+      "state": { "mode": "code", "required": true },
+      "states": { "ON": "Ontario" }
+    },
+    {
+      "code": "MX", "name": "Mexico", "region": "North America", "dialCode": "+52",
+      "postal": { "required": true, "regex": "^\\d{5}$", "example": "06600" },
+      "state": { "mode": "code", "required": true },
+      "states": { "CMX": "Ciudad de México" }
+    },
+    {
+      "code": "BR", "name": "Brazil", "region": "South America", "dialCode": "+55",
+      "postal": { "required": true, "regex": "^\\d{5}-?\\d{3}$", "example": "01310-200" },
+      "state": { "mode": "code", "required": true },
+      "states": { "SP": "São Paulo", "RJ": "Rio de Janeiro" }
+    },
+    {
+      "code": "AR", "name": "Argentina", "region": "South America", "dialCode": "+54",
+      "postal": { "required": true, "regex": "^([A-Za-z]\\d{4}[A-Za-z]{3}|\\d{4})$", "example": "C1010AAP" },
+      "state": { "mode": "name", "required": true },
+      "states": { "C": "Ciudad Autónoma de Buenos Aires" }
+    },
+    {
+      "code": "GB", "name": "United Kingdom", "region": "Europe", "dialCode": "+44",
+      "postal": { "required": true, "regex": "^[A-Za-z]{1,2}\\d[A-Za-z\\d]? ?\\d[A-Za-z]{2}$", "example": "SW1A 2AA" },
+      "state": { "mode": "none", "required": false },
+      "states": {}
+    },
+    {
+      "code": "DE", "name": "Germany", "region": "Europe", "dialCode": "+49",
+      "postal": { "required": true, "regex": "^\\d{5}$", "example": "11011" },
+      "state": { "mode": "none", "required": false },
+      "states": { "BE": "Berlin", "BY": "Bayern" }
+    },
+    {
+      "code": "FR", "name": "France", "region": "Europe", "dialCode": "+33",
+      "postal": { "required": true, "regex": "^\\d{5}$", "example": "75007" },
+      "state": { "mode": "none", "required": false },
+      "states": {}
+    },
+    {
+      "code": "IT", "name": "Italy", "region": "Europe", "dialCode": "+39",
+      "postal": { "required": true, "regex": "^\\d{5}$", "example": "00184" },
+      "state": { "mode": "code", "required": false },
+      "states": { "RM": "Roma", "MI": "Milano" }
+    },
+    {
+      "code": "ES", "name": "Spain", "region": "Europe", "dialCode": "+34",
+      "postal": { "required": true, "regex": "^\\d{5}$", "example": "28014" },
+      "state": { "mode": "name", "required": false },
+      "states": { "M": "Madrid", "B": "Barcelona" }
+    },
+    {
+      "code": "NL", "name": "Netherlands", "region": "Europe", "dialCode": "+31",
+      "postal": { "required": true, "regex": "^\\d{4} ?[A-Za-z]{2}$", "example": "1071 XX" },
+      "state": { "mode": "none", "required": false },
+      "states": {}
+    },
+    {
+      "code": "AU", "name": "Australia", "region": "APAC", "dialCode": "+61",
+      "postal": { "required": true, "regex": "^\\d{4}$", "example": "2000" },
+      "state": { "mode": "code", "required": true },
+      "states": { "NSW": "New South Wales", "VIC": "Victoria" }
+    },
+    {
+      "code": "NZ", "name": "New Zealand", "region": "APAC", "dialCode": "+64",
+      "postal": { "required": true, "regex": "^\\d{4}$", "example": "6011" },
+      "state": { "mode": "none", "required": false },
+      "states": {}
+    },
+    {
+      "code": "JP", "name": "Japan", "region": "APAC", "dialCode": "+81",
+      "postal": { "required": true, "regex": "^\\d{3}-?\\d{4}$", "example": "100-8111" },
+      "state": { "mode": "name", "required": true },
+      "states": { "13": "Tokyo" },
+      "notes": "Latin-script addresses by default; JP-script variants live on the address records as `unicode`."
+    },
+    {
+      "code": "KR", "name": "South Korea", "region": "APAC", "dialCode": "+82",
+      "postal": { "required": true, "regex": "^\\d{5}$", "example": "03045" },
+      "state": { "mode": "name", "required": true },
+      "states": { "11": "Seoul" }
+    },
+    {
+      "code": "SG", "name": "Singapore", "region": "APAC", "dialCode": "+65",
+      "postal": { "required": true, "regex": "^\\d{6}$", "example": "049178" },
+      "state": { "mode": "none", "required": false },
+      "states": {}
+    },
+    {
+      "code": "IN", "name": "India", "region": "APAC", "dialCode": "+91",
+      "postal": { "required": true, "regex": "^\\d{6}$", "example": "400001" },
+      "state": { "mode": "name", "required": true },
+      "states": { "MH": "Maharashtra", "DL": "Delhi", "KA": "Karnataka" }
+    },
+    {
+      "code": "AE", "name": "United Arab Emirates", "region": "Middle East", "dialCode": "+971",
+      "postal": { "required": false, "regex": "^\\d{5}$", "example": "00000" },
+      "state": { "mode": "name", "required": false },
+      "states": { "DU": "Dubai", "AZ": "Abu Dhabi" },
+      "notes": "UAE has no postal codes. 00000 is filled only when the form marks the field required; flag this to the owner during address verification."
+    },
+    {
+      "code": "SA", "name": "Saudi Arabia", "region": "Middle East", "dialCode": "+966",
+      "postal": { "required": true, "regex": "^\\d{5}(-\\d{4})?$", "example": "12211" },
+      "state": { "mode": "name", "required": false },
+      "states": { "01": "Riyadh", "02": "Makkah" }
+    },
+    {
+      "code": "QA", "name": "Qatar", "region": "Middle East", "dialCode": "+974",
+      "postal": { "required": false, "regex": "^\\d{5}$", "example": "00000" },
+      "state": { "mode": "none", "required": false },
+      "states": {},
+      "notes": "Qatar has no postal codes; 00000 only when the form requires one."
+    },
+    {
+      "code": "IL", "name": "Israel", "region": "Middle East", "dialCode": "+972",
+      "postal": { "required": true, "regex": "^\\d{7}$", "example": "6423906" },
+      "state": { "mode": "none", "required": false },
+      "states": {}
+    },
+    {
+      "code": "ZA", "name": "South Africa", "region": "Africa", "dialCode": "+27",
+      "postal": { "required": true, "regex": "^\\d{4}$", "example": "8001" },
+      "state": { "mode": "name", "required": false },
+      "states": { "WC": "Western Cape", "GT": "Gauteng" }
+    },
+    {
+      "code": "NG", "name": "Nigeria", "region": "Africa", "dialCode": "+234",
+      "postal": { "required": true, "regex": "^\\d{6}$", "example": "101001" },
+      "state": { "mode": "name", "required": true },
+      "states": { "LA": "Lagos", "FC": "Abuja (FCT)" }
+    }
+  ]
+}

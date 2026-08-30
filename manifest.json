@@ -1,0 +1,59 @@
+{
+  "manifest_version": 3,
+  "name": "SFCC QA Autofill",
+  "version": "0.1.0",
+  "description": "One-click test data for SFRA, SiteGenesis and PWA Kit storefront forms.",
+  "permissions": ["contextMenus", "storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "src/background.js",
+    "scripts": [
+      "src/lib/libphonenumber.min.js",
+      "src/lib/data.js",
+      "src/lib/phone.js",
+      "src/lib/generator.js",
+      "src/background.js"
+    ]
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "src/icons/icon16.png",
+      "48": "src/icons/icon48.png",
+      "128": "src/icons/icon128.png"
+    }
+  },
+  "options_page": "src/options/options.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "src/content/platform.js",
+        "src/content/detect.js",
+        "src/content/fill.js",
+        "src/content/frames.js",
+        "src/content/content.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "fill-all": {
+      "suggested_key": { "default": "Ctrl+Shift+F", "mac": "Command+Shift+F" },
+      "description": "Fill all fields"
+    },
+    "fill-card": {
+      "suggested_key": { "default": "Ctrl+Shift+K", "mac": "Command+Shift+K" },
+      "description": "Fill card only"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": { "id": "sfcc-qa-autofill@local", "strict_min_version": "115.0" }
+  },
+  "icons": {
+    "16": "src/icons/icon16.png",
+    "48": "src/icons/icon48.png",
+    "128": "src/icons/icon128.png"
+  }
+}
