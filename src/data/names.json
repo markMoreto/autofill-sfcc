@@ -1,0 +1,23 @@
+{
+  "$comment": "Name pools. Default pools are ASCII-safe with no apostrophes/hyphens (many SFCC regex validators reject them). The `stress` pools are mixed in only when the 'Stress-test names' option is on, to exercise validation. Script pools (ja/ko/ar) are picked when a project needs native-script identities via options.",
+  "latin": {
+    "first": ["Alex", "Sam", "Jamie", "Taylor", "Morgan", "Casey", "Jordan", "Riley", "Avery", "Quinn", "Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Mia", "Lucas", "Sofia", "Mason", "Isla", "Oscar", "Clara", "Felix", "Nora", "Hugo", "Stella", "Leo", "Maya", "Finn", "Elena", "Marco", "Anna", "David", "Laura", "Peter", "Julia", "Thomas", "Alice", "Henry"],
+    "last": ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Martinez", "Lopez", "Wilson", "Anderson", "Taylor", "Thomas", "Moore", "Martin", "Lee", "Thompson", "White", "Harris", "Clark", "Lewis", "Walker", "Hall", "Young", "King", "Wright", "Scott", "Green", "Baker", "Adams", "Nelson", "Carter", "Mitchell", "Turner", "Parker", "Collins", "Edwards", "Stewart", "Morris"]
+  },
+  "ja": {
+    "first": ["Haruto", "Yui", "Sota", "Aoi", "Ren", "Hina", "Yuto", "Sakura"],
+    "last": ["Sato", "Suzuki", "Takahashi", "Tanaka", "Watanabe", "Ito", "Yamamoto", "Nakamura"]
+  },
+  "ko": {
+    "first": ["Minjun", "Seoyeon", "Jiho", "Haeun", "Doyun", "Jiwoo", "Siwoo", "Sua"],
+    "last": ["Kim", "Lee", "Park", "Choi", "Jung", "Kang", "Cho", "Yoon"]
+  },
+  "ar": {
+    "first": ["Omar", "Layla", "Youssef", "Fatima", "Ali", "Noor", "Hassan", "Amira"],
+    "last": ["Haddad", "Khalil", "Nasser", "Rahman", "Saleh", "Fares", "Amin", "Karim"]
+  },
+  "stress": {
+    "first": ["José", "Zoë", "François", "Renée", "Søren", "Åsa"],
+    "last": ["O'Brien", "Smith-Jones", "Müller", "D'Angelo", "van der Berg", "Nuñez"]
+  }
+}

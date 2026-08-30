@@ -1,0 +1,22 @@
+{
+  "name": "sfcc-qa-autofill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Browser extension: one-click test data for SFRA, SiteGenesis and PWA Kit storefront forms.",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "vendor:phone": "node scripts/vendor-libphonenumber.mjs",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.46.0",
+    "jsdom": "^24.1.0",
+    "libphonenumber-js": "^1.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vitest": "^2.0.0"
+  }
+}

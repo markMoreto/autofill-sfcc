@@ -1,0 +1,59 @@
+{
+  "$comment": "Selectors for INSIDE payment vendors' hosted-field iframes (the content script runs in every frame). Each frame typically hosts a single field. `hostPatterns` decides which vendor map applies to the current frame; `typingSimulation: true` means the vendor rejects synthetic input events, so fill.js types per-character KeyboardEvents first. If filling still fails, the popup offers per-field Copy buttons. Best-effort by design — vendors change these; patch this file, nothing else.",
+  "vendors": [
+    {
+      "id": "adyen",
+      "hostPatterns": ["\\.adyen\\.com$"],
+      "typingSimulation": true,
+      "fields": {
+        "card.number": ["input[data-fieldtype=\"encryptedCardNumber\"]", "#encryptedCardNumber"],
+        "card.expiry": ["input[data-fieldtype=\"encryptedExpiryDate\"]"],
+        "card.expMonth": ["input[data-fieldtype=\"encryptedExpiryMonth\"]"],
+        "card.expYear": ["input[data-fieldtype=\"encryptedExpiryYear\"]"],
+        "card.cvv": ["input[data-fieldtype=\"encryptedSecurityCode\"]"]
+      }
+    },
+    {
+      "id": "stripe",
+      "hostPatterns": ["^js\\.stripe\\.com$"],
+      "typingSimulation": true,
+      "fields": {
+        "card.number": ["input[name=\"cardnumber\"]", "input[name=\"number\"]"],
+        "card.expiry": ["input[name=\"exp-date\"]", "input[name=\"expiry\"]"],
+        "card.cvv": ["input[name=\"cvc\"]"],
+        "card.postalCode": ["input[name=\"postal\"]", "input[name=\"postalCode\"]"]
+      }
+    },
+    {
+      "id": "braintree",
+      "hostPatterns": ["\\.braintreegateway\\.com$", "\\.braintree-api\\.com$"],
+      "typingSimulation": false,
+      "fields": {
+        "card.number": ["#credit-card-number", "input[name=\"credit-card-number\"]"],
+        "card.expiry": ["#expiration", "input[name=\"expiration\"]"],
+        "card.expMonth": ["#expiration-month"],
+        "card.expYear": ["#expiration-year"],
+        "card.cvv": ["#cvv", "input[name=\"cvv\"]"]
+      }
+    },
+    {
+      "id": "cybersource",
+      "hostPatterns": ["flex\\.cybersource\\.com$", "\\.flexmicroform\\.com$"],
+      "typingSimulation": true,
+      "fields": {
+        "card.number": ["input[aria-label=\"Card number\"]", "input[name=\"number\"]"],
+        "card.cvv": ["input[aria-label=\"Security code\"]", "input[name=\"securityCode\"]"]
+      }
+    },
+    {
+      "id": "checkoutcom",
+      "hostPatterns": ["\\.checkout\\.com$"],
+      "typingSimulation": true,
+      "fields": {
+        "card.number": ["input[name=\"checkout-frames-card-number\"]", "input[id*=\"card-number\"]"],
+        "card.expiry": ["input[name=\"checkout-frames-expiry-date\"]", "input[id*=\"expiry-date\"]"],
+        "card.cvv": ["input[name=\"checkout-frames-cvv\"]", "input[id*=\"cvv\"]"]
+      }
+    }
+  ]
+}
