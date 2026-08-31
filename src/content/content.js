@@ -11,25 +11,50 @@
   const isTop = (() => { try { return window.self === window.top; } catch { return false; } })();
   const frameLabel = isTop ? 'top' : `frame:${location.hostname}`;
 
-  async function clickReveals(map, scope) {
-    // Expand collapsed sections (SFRA billing edit, guest-checkout reveal)
-    // before detection, so hidden-but-fillable fields become visible.
+  // A reveal toggle must be button-like. Anchors that would navigate are
+  // never clicked — theme class collisions must not send the page elsewhere.
+  function isClickSafe(el) {
+    const tag = el.tagName;
+    if (tag === 'BUTTON') return true;
+    if (tag === 'INPUT' && ['button', 'checkbox', 'radio'].includes(el.type)) return true;
+    if (el.getAttribute('role') === 'button') return true;
+    if (tag === 'A') {
+      const href = el.getAttribute('href') || '';
+      return href === '' || href === '#' || href.startsWith('javascript:');
+    }
+    return false;
+  }
+
+  // Expand a collapsed section (e.g. SFRA billing edit) ONLY when the group
+  // has no visible fields — an already-open section must never be clicked.
+  // Returns a report of what was clicked for the popup's result panel.
+  async function clickReveals(map, scope, fields) {
     const reveals = (map && map.reveals) || {};
     // 'guest' reveals are submit buttons on some platforms (they navigate!) —
     // only click them when the user explicitly asked for the guest scope.
-    const wanted = scope === 'all' ? Object.keys(reveals).filter((k) => k !== 'guest') : [scope];
-    let clicked = false;
+    const wanted = (scope === 'all' ? Object.keys(reveals).filter((k) => k !== 'guest') : [scope])
+      .filter((key) => reveals[key] && reveals[key].length);
+    const clicked = [];
+    // Only core address fields tell whether the collapsible section is open —
+    // the same-as-shipping checkbox and contact email/phone live outside it.
+    const CORE = ['firstName', 'lastName', 'address1', 'address2', 'city', 'postalCode', 'state', 'country'];
     for (const key of wanted) {
+      const groupVisible = CORE.some((base) =>
+        (fields[`${key}.${base}`] || []).some((el) => g.SFCCAF.isVisible(el))
+      );
+      if (groupVisible) continue; // section already open — nothing to reveal
       for (const sel of reveals[key] || []) {
         let el;
         try { el = document.querySelector(sel); } catch { continue; }
-        if (el && g.SFCCAF.isVisible(el)) {
-          el.click();
-          clicked = true;
-        }
+        if (!el || !g.SFCCAF.isVisible(el) || !isClickSafe(el)) continue;
+        console.debug('[SFCC Autofill] clicking reveal for', key, '→', sel, el);
+        el.click();
+        clicked.push({ field: `reveal:${key}`, selector: sel, frame: frameLabel });
+        break; // one toggle per section
       }
     }
-    if (clicked) await new Promise((r) => setTimeout(r, 250));
+    if (clicked.length) await new Promise((r) => setTimeout(r, 250));
+    return clicked;
   }
 
   async function handleFill(msg) {
@@ -52,13 +77,21 @@
 
     const platform = g.SFCCAF.detectPlatform(document);
     const platformMap = msg.maps[platform];
-    if (platform === 'sfra' || platform === 'sitegenesis') {
-      await clickReveals(platformMap, msg.scope);
-    }
 
-    const { fields, unresolved } = g.SFCCAF.buildFieldMap(
+    let { fields, unresolved } = g.SFCCAF.buildFieldMap(
       msg.scope, msg.maps, platform, msg.countryMeta, document
     );
+
+    // If a section (e.g. SFRA billing) is collapsed, open it and re-detect.
+    let revealClicks = [];
+    if (platform === 'sfra' || platform === 'sitegenesis') {
+      revealClicks = await clickReveals(platformMap, msg.scope, fields);
+      if (revealClicks.length) {
+        ({ fields, unresolved } = g.SFCCAF.buildFieldMap(
+          msg.scope, msg.maps, platform, msg.countryMeta, document
+        ));
+      }
+    }
 
     const { filled, skipped } = await g.SFCCAF.applyProfile({
       scope: msg.scope,
@@ -69,11 +102,15 @@
       frameLabel,
     });
 
+    if (filled.length || skipped.length) {
+      console.debug('[SFCC Autofill]', platform, 'filled:', filled, 'skipped:', skipped, 'unresolved:', unresolved);
+    }
+
     // Only frames that actually found something report unresolved fields —
     // an empty ad iframe shouldn't flag "missing card number".
     return {
       platform, isTop, frame: frameLabel,
-      filled, skipped,
+      filled: [...revealClicks, ...filled], skipped,
       unresolved: filled.length || skipped.length ? unresolved : [],
       durationMs: Math.round(performance.now() - started),
     };

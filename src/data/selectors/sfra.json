@@ -52,7 +52,7 @@
   },
   "reveals": {
     "$comment": "Selectors clicked to expand a collapsed section before filling its fields. Key = logical scope.",
-    "billing": [".btn-show-details", ".billing-address-block .btn-edit"],
+    "billing": [".billing-address-block .btn-show-details", ".address-selector-block .btn-show-details", ".payment-form .btn-show-details", ".billing-address-block .btn-edit"],
     "guest": [".checkout-as-guest", "a[href*=\"Checkout-Guest\"]"]
   },
   "shipmentForms": ".shipping-form, form.shipping-form, [data-shipment-uuid]"
