@@ -15,7 +15,9 @@
     // Expand collapsed sections (SFRA billing edit, guest-checkout reveal)
     // before detection, so hidden-but-fillable fields become visible.
     const reveals = (map && map.reveals) || {};
-    const wanted = scope === 'all' ? Object.keys(reveals) : [scope];
+    // 'guest' reveals are submit buttons on some platforms (they navigate!) —
+    // only click them when the user explicitly asked for the guest scope.
+    const wanted = scope === 'all' ? Object.keys(reveals).filter((k) => k !== 'guest') : [scope];
     let clicked = false;
     for (const key of wanted) {
       for (const sel of reveals[key] || []) {
