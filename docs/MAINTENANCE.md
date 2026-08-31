@@ -104,6 +104,12 @@ npm run vendor:phone   # refreshes src/lib/libphonenumber.min.js + phone-example
 npm test               # phone suite revalidates every country
 ```
 
+## Upgrading @playwright/test
+
+The version is pinned **exactly** because each Playwright release requires a
+specific Chromium revision. After bumping it, run
+`npx playwright install chromium` before `npm run test:e2e`.
+
 ## Release checklist
 
 1. `npm test` — all green.
