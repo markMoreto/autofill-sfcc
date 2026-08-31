@@ -118,16 +118,21 @@ function refreshInstructions() {
 }
 
 async function save() {
-  settings.country = $('country').value;
-  settings.vendor = $('vendor').value;
-  settings.cardId = $('card').value;
-  settings.addressId = $('address').value;
-  settings.profileMode = $('profileMode').value;
-  settings.phoneFormat = $('phoneFormat').value;
-  settings.billingSameAsShipping = $('billingSameAsShipping').checked;
-  settings.stressNames = $('stressNames').checked;
+  // Patch only popup-owned keys so Options-page edits (overrides, custom
+  // addresses, defaults) made while the popup is open are never clobbered.
+  const patch = {
+    country: $('country').value,
+    vendor: $('vendor').value,
+    cardId: $('card').value,
+    addressId: $('address').value,
+    profileMode: $('profileMode').value,
+    phoneFormat: $('phoneFormat').value,
+    billingSameAsShipping: $('billingSameAsShipping').checked,
+    stressNames: $('stressNames').checked,
+  };
+  Object.assign(settings, patch);
   const stored = await chrome.storage.local.get('settings');
-  await chrome.storage.local.set({ settings: Object.assign({}, stored.settings, settings) });
+  await chrome.storage.local.set({ settings: Object.assign({}, stored.settings, patch) });
 }
 
 async function fill(scope) {

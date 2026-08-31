@@ -15,8 +15,23 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 let context;
 let background;
+let extensionId;
 let server;
 let baseUrl;
+
+// MV3 service workers idle out after ~30s; a stale handle hangs evaluate().
+// Re-acquire the worker, waking it via an extension page when needed.
+async function getBackground() {
+  let worker = context.serviceWorkers()[0];
+  if (!worker) {
+    const waker = await context.newPage();
+    const woken = context.waitForEvent('serviceworker', { timeout: 10_000 }).catch(() => null);
+    await waker.goto(`chrome-extension://${extensionId}/src/options/options.html`);
+    worker = context.serviceWorkers()[0] || (await woken);
+    await waker.close();
+  }
+  return worker;
+}
 
 test.beforeAll(async () => {
   server = createServer((req, res) => {
@@ -41,6 +56,7 @@ test.beforeAll(async () => {
     ],
   });
   background = context.serviceWorkers()[0] || (await context.waitForEvent('serviceworker'));
+  extensionId = new URL(background.url()).hostname;
 });
 
 test.afterAll(async () => {
@@ -51,6 +67,7 @@ test.afterAll(async () => {
 async function fillActiveTab(page, scope) {
   // Drive the background's doFill exactly like the popup does.
   await page.bringToFront();
+  background = await getBackground();
   return background.evaluate(async (scope) => {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     // eslint-disable-next-line no-undef
