@@ -67,7 +67,7 @@ describe('reveal-click safety', () => {
     expect(clicks).not.toHaveBeenCalled();
     expect(result.filled.some((f) => f.field.startsWith('reveal:'))).toBe(false);
     // billing contact still filled normally
-    expect(document.getElementById('email').value).toMatch(/@example\.com$/);
+    expect(document.getElementById('email').value).toMatch(/@mailinator\.com$/);
   });
 
   it('clicks the reveal once when the billing section is collapsed, then fills it', async () => {

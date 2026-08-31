@@ -4,7 +4,7 @@
 const $ = (id) => document.getElementById(id);
 
 const DEFAULTS = {
-  emailPrefix: 'qa', emailDomain: 'example.com', password: '', namePool: 'latin',
+  emailPrefix: 'qa', emailDomain: 'mailinator.com', password: '', namePool: 'latin',
   overrides: {}, customAddresses: {},
 };
 
@@ -66,7 +66,7 @@ async function save() {
   const stored = await chrome.storage.local.get('settings');
   const settings = Object.assign({}, stored.settings, {
     emailPrefix: $('emailPrefix').value.trim() || 'qa',
-    emailDomain: $('emailDomain').value.trim() || 'example.com',
+    emailDomain: $('emailDomain').value.trim() || 'mailinator.com',
     password: $('password').value,
     namePool: $('namePool').value,
     overrides,

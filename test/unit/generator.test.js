@@ -9,7 +9,10 @@ describe('email generation', () => {
     const a = buildProfile({ now: new Date(2026, 7, 31, 10, 0, 0, 1) });
     const b = buildProfile({ now: new Date(2026, 7, 31, 10, 0, 0, 2) });
     expect(a.email).not.toBe(b.email);
-    expect(a.email).toMatch(/^qa\+\d{8}-\d{9}@example\.com$/);
+    expect(a.email).toMatch(/^qa-\d{8}-\d{9}@mailinator\.com$/);
+    // Mailinator maps the full local part to a public inbox; '+' would break
+    // that (and several SFCC email validators reject it).
+    expect(a.email.split('@')[0]).not.toContain('+');
   });
 });
 

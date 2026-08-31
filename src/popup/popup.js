@@ -207,9 +207,24 @@ function showCardCopy(profileSummary) {
       setTimeout(() => (btn.textContent = 'Copy'), 1200);
     });
     row.append(span, btn);
+    // Mailinator inboxes are public — link straight to the one this fill used,
+    // so registration/order emails are one click away.
+    const inboxUrl = mailinatorInboxUrl(value);
+    if (label === 'Email' && inboxUrl) {
+      const inbox = document.createElement('button');
+      inbox.textContent = 'Inbox ↗';
+      inbox.title = 'Open the public Mailinator inbox for this address';
+      inbox.addEventListener('click', () => chrome.tabs.create({ url: inboxUrl }));
+      row.appendChild(inbox);
+    }
     panel.appendChild(row);
   }
   panel.hidden = rows.length === 0;
+}
+
+function mailinatorInboxUrl(email) {
+  const m = /^([^@]+)@mailinator\.com$/i.exec(String(email || '').trim());
+  return m ? `https://www.mailinator.com/v4/public/inboxes.jsp?to=${encodeURIComponent(m[1])}` : null;
 }
 
 // ---- wiring

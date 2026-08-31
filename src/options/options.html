@@ -25,11 +25,18 @@
     <div>
       <label for="emailPrefix">Email prefix</label>
       <input type="text" id="emailPrefix">
-      <p class="hint">Emails are generated as <code>prefix+YYYYMMDD-HHMMSSmmm@domain</code> — always unique.</p>
+      <p class="hint">Emails are generated as <code>prefix-YYYYMMDD-HHMMSSmmm@domain</code> — always unique.</p>
     </div>
     <div>
       <label for="emailDomain">Email domain</label>
       <input type="text" id="emailDomain">
+      <p class="hint">
+        Default <code>mailinator.com</code>: each generated address is a <em>public</em>
+        <a href="https://www.mailinator.com/v4/public/inboxes.jsp" target="_blank">Mailinator inbox</a>,
+        so you can open the storefront's registration/order emails (the popup links to the inbox
+        after a fill). Anyone can read these inboxes — sandbox data only. Set your own domain here
+        if your team uses a private catch-all instead.
+      </p>
     </div>
     <div>
       <label for="password">Fixed password (empty = generate per fill)</label>

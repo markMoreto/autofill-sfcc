@@ -41,8 +41,10 @@
     return { firstName: first, lastName: last };
   }
 
+  // Hyphen separator (not '+'): the whole local part becomes the Mailinator
+  // inbox name, and several SFCC email validators reject '+' outright.
   function makeEmail(settings, now) {
-    return `${settings.emailPrefix}+${timestamp(now)}@${settings.emailDomain}`;
+    return `${settings.emailPrefix}-${timestamp(now)}@${settings.emailDomain}`;
   }
 
   function luhnValid(number) {
