@@ -55,8 +55,12 @@ per-site overrides.
 
 Notes on behavior:
 
-- **Emails are always unique** (`qa+YYYYMMDD-HHMMSSmmm@example.com`, configurable in
-  Options) so registration never collides.
+- **Emails are always unique** (`qa-YYYYMMDD-HHMMSSmmm@mailinator.com`, configurable in
+  Options) so registration never collides. With the default Mailinator domain each address
+  is a **public inbox** — the popup's result panel shows an **Inbox ↗** button that opens
+  it, so you can read the storefront's registration/order emails. Public means anyone can
+  read them: sandbox data only; switch the domain in Options if your team has a private
+  catch-all.
 - **Fill registration** stores the generated credentials; **Fill login** replays the last
   registered email/password.
 - **Billing same as shipping** checks the storefront's checkbox and skips billing address

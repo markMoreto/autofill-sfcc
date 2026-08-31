@@ -90,7 +90,7 @@ test('SFRA checkout: fill everything, state options load after country change', 
   await expect(page.locator('#cardNumber')).toHaveValue('4111111111111111');
   await expect(page.locator('#securityCode')).toHaveValue('737');
   const email = await page.locator('#email').inputValue();
-  expect(email).toMatch(/^qa\+.+@example\.com$/);
+  expect(email).toMatch(/^qa-.+@mailinator\.com$/);
 
   // Perf budget: <150ms fill plus the mocked state-reload waits (2 x 80ms AJAX).
   expect(result.durationMs).toBeLessThan(150 + 400);

@@ -49,7 +49,7 @@ export function addressFor(code, index = 0) {
 const baseSettings = {
   country: 'US', vendor: 'adyen', cardId: '', profileMode: 'registered',
   phoneFormat: 'national', billingSameAsShipping: true,
-  emailPrefix: 'qa', emailDomain: 'example.com', password: '',
+  emailPrefix: 'qa', emailDomain: 'mailinator.com', password: '',
   stressNames: false, namePool: 'latin', lastRegistered: null,
 };
 

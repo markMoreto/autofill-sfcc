@@ -46,7 +46,10 @@
     phoneFormat: 'national',   // 'national' | 'e164'
     billingSameAsShipping: true,
     emailPrefix: 'qa',
-    emailDomain: 'example.com',
+    // mailinator.com: every generated address is a public Mailinator inbox,
+    // so QA can actually open registration/order emails. The popup links
+    // straight to the inbox after a fill.
+    emailDomain: 'mailinator.com',
     password: '',              // '' = generate one per fill (policy-safe)
     stressNames: false,
     namePool: 'latin',         // 'latin' | 'ja' | 'ko' | 'ar'
