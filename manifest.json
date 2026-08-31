@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SFCC QA Autofill",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "One-click test data for SFRA, SiteGenesis and PWA Kit storefront forms.",
   "permissions": ["contextMenus", "storage", "activeTab", "scripting"],
   "host_permissions": ["<all_urls>"],
