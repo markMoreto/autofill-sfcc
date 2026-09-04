@@ -17,7 +17,7 @@ enforce most of the rules below automatically.**
      field), `required`;
    - `states`: code → name map for the codes used by this country's addresses
      (used to match select options by value *or* text).
-2. Add **≥2 addresses** (tested) to `src/data/addresses.json` — see next recipe.
+2. Add **≥5 addresses** (tested) to `src/data/addresses.json` — see next recipe.
 3. Run `npm run vendor:phone` — it regenerates `src/data/phone-examples.json`
    and fails loudly if libphonenumber has no example number for the new code.
 4. `npm test`. The phone suite automatically validates the new country in both
@@ -30,7 +30,10 @@ Rules (enforced by tests where possible):
 - Real, deliverable, **public** addresses only — government buildings,
   universities, museums, landmarks, hotels. Never private residences.
 - Unique `id`, human `label`, `address1`, `city`; `state` when the country
-  requires it; `postalCode` matching the country regex.
+  requires it; `postalCode` matching the country regex. A record's `state` must
+  resolve through the country's `states` map — as a key (code-mode countries:
+  `CA`, `NSW`) or as a value (name-mode countries: `Maharashtra`) — so the
+  fill engine can match select options by code *or* text (tested).
 - New addresses ship with `verified: { avatax: null, googleAddressValidation:
   null, verifiedOn: null, notes: "candidate" }`. **Never** record a `pass`
   without actually running [scripts/verify-addresses.md](../scripts/verify-addresses.md)
@@ -51,9 +54,16 @@ Custom addresses** instead (and can be shared via settings export).
 - Numbers must come from the vendor's **public test documentation** — set
   `docUrl` and update `docCheckedOn` (both tested) whenever you touch a vendor.
 - Every number must pass Luhn (tested). `expectedResult` ∈ `approved` /
-  `declined` / `3ds-challenge` / `expired`; keep at least one `approved` card
-  per vendor (tested). Add declined/3DS variants so QA can trigger error states
-  from the same menu.
+  `declined` / `3ds-challenge` / `3ds-frictionless` / `expired`; keep at least
+  one `approved` card per vendor (tested). Add declined/3DS variants so QA can
+  trigger error states from the same menu — the popup groups cards by outcome.
+- Optional `holderName` replaces the generated cardholder name for that card.
+  Use it for gateways whose sandbox keys outcomes off the holder (Worldpay
+  `REFUSED`, `REFUSED51`, `ERROR`, `SOFT_DECLINED`).
+- Card ids are unique across all vendors (tested). Leave a card out rather than
+  guess a digit: if a number from a doc fails Luhn, it was mis-transcribed.
+- Checkout.com's test-card page is JS-rendered and could not be re-fetched on
+  2026-09-05; its two entries are unchanged since 2026-08-31.
 - Vendors without a fillable card (wallets, Klarna) use
   `"type": "instructions"` + an `instructions` string — the popup renders it.
 - When a vendor changes its hosted-fields DOM, that is a *selector* problem,
@@ -92,9 +102,30 @@ if a vendor becomes permanently unfillable.
 
 ## Adding a name pool / stress names
 
-`src/data/names.json`. Default pools must stay ASCII-safe with no
-apostrophes/hyphens (tested) — many SFCC regex validators reject them; that's
-what the `stress` pool is for (mixed in only when the popup toggle is on).
+`src/data/names.json`. Every pool except `stress` is
+`{ label, first: [...], last: [...] }` with ≥20 unique names per list, all
+ASCII letters only — no apostrophes/hyphens/diacritics/spaces (tested); many
+SFCC regex validators reject them, and that's what the `stress` pool is for
+(mixed in only when the popup toggle is on). Adding a pool object is enough:
+Options → Name pool lists pools straight from the file, and the generator falls
+back to `latin` for unknown keys.
+
+## Email prefixes and styles
+
+`src/data/emails.json` holds the prefix pool used by Options → Email style
+"random" (≥20 lowercase alphanumeric entries, tested — the whole local part
+becomes a Mailinator inbox name). Style "name" derives the prefix from the
+generated identity (`emailSlug` strips diacritics/apostrophes/spaces). The
+millisecond timestamp is always appended, so uniqueness never depends on the
+prefix.
+
+## Phone numbers
+
+`src/data/phone-examples.json` holds one libphonenumber example per country;
+`src/lib/phone.js` re-rolls the trailing digits per fill and re-validates the
+candidate with the library (falling back to the example), so there is nothing
+to maintain for variety — the phone suite asserts ≥20 distinct valid numbers
+per country. Pass `{ vary: false }` for a deterministic number.
 
 ## Upgrading libphonenumber-js
 

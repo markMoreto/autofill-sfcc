@@ -25,6 +25,7 @@
     countries: () => loadJSON('src/data/countries.json'),
     addresses: () => loadJSON('src/data/addresses.json'),
     names: () => loadJSON('src/data/names.json'),
+    emails: () => loadJSON('src/data/emails.json'),
     cards: () => loadJSON('src/data/cards.json'),
     phoneExamples: () => loadJSON('src/data/phone-examples.json'),
     selectors: async () => ({
@@ -46,13 +47,16 @@
     phoneFormat: 'national',   // 'national' | 'e164'
     billingSameAsShipping: true,
     emailPrefix: 'qa',
+    // 'prefix' = emailPrefix-<timestamp>; 'name' = firstname.lastname-<timestamp>;
+    // 'random' = one of emails.json prefixes-<timestamp>. Always unique per fill.
+    emailStyle: 'prefix',
     // mailinator.com: every generated address is a public Mailinator inbox,
     // so QA can actually open registration/order emails. The popup links
     // straight to the inbox after a fill.
     emailDomain: 'mailinator.com',
     password: '',              // '' = generate one per fill (policy-safe)
     stressNames: false,
-    namePool: 'latin',         // 'latin' | 'ja' | 'ko' | 'ar'
+    namePool: 'latin',         // any pool key in names.json except 'stress'
     addressId: '',             // preferred bundled/custom address id; '' = first for country
     overrides: {},             // { [hostname]: partial selector map }
     customAddresses: {},       // { [countryCode]: [address records] }

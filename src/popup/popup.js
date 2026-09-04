@@ -92,8 +92,24 @@ function refreshCards() {
     return;
   }
   sel.disabled = false;
+  // Group by outcome: vendors now ship dozens of cards, so a flat list is hard to scan.
+  const groupLabels = {
+    approved: 'Approved', '3ds-challenge': '3DS challenge', '3ds-frictionless': '3DS frictionless',
+    declined: 'Declined', expired: 'Expired',
+  };
+  const groups = new Map();
   for (const c of vendor.cards) {
-    sel.appendChild(new Option(`${c.brand} ·${c.number.slice(-4)} (${c.expectedResult})`, c.id));
+    if (!groups.has(c.expectedResult)) groups.set(c.expectedResult, []);
+    groups.get(c.expectedResult).push(c);
+  }
+  for (const [result, cards] of groups) {
+    const group = document.createElement('optgroup');
+    group.label = groupLabels[result] || result;
+    for (const c of cards) {
+      const holder = c.holderName ? ` · ${c.holderName}` : '';
+      group.appendChild(new Option(`${c.brand} ·${c.number.slice(-4)}${holder}`, c.id));
+    }
+    sel.appendChild(group);
   }
   if (settings.cardId && vendor.cards.some((c) => c.id === settings.cardId)) sel.value = settings.cardId;
   else settings.cardId = vendor.cards[0].id;

@@ -49,7 +49,7 @@ export function addressFor(code, index = 0) {
 const baseSettings = {
   country: 'US', vendor: 'adyen', cardId: '', profileMode: 'registered',
   phoneFormat: 'national', billingSameAsShipping: true,
-  emailPrefix: 'qa', emailDomain: 'mailinator.com', password: '',
+  emailPrefix: 'qa', emailDomain: 'mailinator.com', emailStyle: 'prefix', password: '',
   stressNames: false, namePool: 'latin', lastRegistered: null,
 };
 
@@ -62,6 +62,7 @@ export function buildProfile(patch = {}) {
     addressRecord: patch.addressRecord || addressFor(settings.country),
     billingRecord: patch.billingRecord || null,
     names: readJSON('src/data/names.json'),
+    emails: readJSON('src/data/emails.json'),
     cardsData: readJSON('src/data/cards.json'),
     phoneNumbers: patch.phoneNumbers || { e164: '+14085551234', national: '(408) 555-1234', nationalCompact: '4085551234' },
     settings,

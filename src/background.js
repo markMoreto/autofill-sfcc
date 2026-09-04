@@ -65,11 +65,12 @@ chrome.commands.onCommand.addListener(async (command) => {
 // ---------------------------------------------------------------- fill
 
 async function buildPayload(scope, settings, hostname) {
-  const [countriesData, addressesData, names, cardsData, phoneExamples, maps] =
+  const [countriesData, addressesData, names, emails, cardsData, phoneExamples, maps] =
     await Promise.all([
       SFCCAF.data.countries(),
       SFCCAF.data.addresses(),
       SFCCAF.data.names(),
+      SFCCAF.data.emails(),
       SFCCAF.data.cards(),
       SFCCAF.data.phoneExamples(),
       SFCCAF.data.selectors(),
@@ -89,7 +90,7 @@ async function buildPayload(scope, settings, hostname) {
 
   const phoneNumbers = SFCCAF.phone.generate(countryMeta.code, phoneExamples);
   const profile = SFCCAF.generator.buildProfile({
-    scope, countryMeta, addressRecord, billingRecord, names, cardsData, phoneNumbers, settings,
+    scope, countryMeta, addressRecord, billingRecord, names, emails, cardsData, phoneNumbers, settings,
   });
 
   return {

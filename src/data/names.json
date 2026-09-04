@@ -1,23 +1,78 @@
 {
-  "$comment": "Name pools. Default pools are ASCII-safe with no apostrophes/hyphens (many SFCC regex validators reject them). The `stress` pools are mixed in only when the 'Stress-test names' option is on, to exercise validation. Script pools (ja/ko/ar) are picked when a project needs native-script identities via options.",
+  "$comment": "Name pools. Every pool except `stress` is ASCII-safe with no apostrophes/hyphens/diacritics (many SFCC regex validators reject them) — tested. Each pool has a `label` (shown in Options → Name pool), `first` and `last` lists of ≥20 entries. The `stress` pool is mixed in only when the popup's 'Stress-test names' toggle is on, to exercise validation (apostrophes, hyphens, diacritics, spaces, single-letter and very long names).",
   "latin": {
-    "first": ["Alex", "Sam", "Jamie", "Taylor", "Morgan", "Casey", "Jordan", "Riley", "Avery", "Quinn", "Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Mia", "Lucas", "Sofia", "Mason", "Isla", "Oscar", "Clara", "Felix", "Nora", "Hugo", "Stella", "Leo", "Maya", "Finn", "Elena", "Marco", "Anna", "David", "Laura", "Peter", "Julia", "Thomas", "Alice", "Henry"],
-    "last": ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Martinez", "Lopez", "Wilson", "Anderson", "Taylor", "Thomas", "Moore", "Martin", "Lee", "Thompson", "White", "Harris", "Clark", "Lewis", "Walker", "Hall", "Young", "King", "Wright", "Scott", "Green", "Baker", "Adams", "Nelson", "Carter", "Mitchell", "Turner", "Parker", "Collins", "Edwards", "Stewart", "Morris"]
+    "label": "Latin (default)",
+    "first": ["Alex", "Sam", "Jamie", "Taylor", "Morgan", "Casey", "Jordan", "Riley", "Avery", "Quinn", "Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Mia", "Lucas", "Sofia", "Mason", "Isla", "Oscar", "Clara", "Felix", "Nora", "Hugo", "Stella", "Leo", "Maya", "Finn", "Elena", "Marco", "Anna", "David", "Laura", "Peter", "Julia", "Thomas", "Alice", "Henry", "Grace", "Jack", "Chloe", "Daniel", "Zoe", "Samuel", "Lily", "Benjamin", "Ruby", "Nathan", "Ella", "Adam", "Hannah", "Ryan", "Sarah", "Michael", "Emily", "James", "Rachel", "Owen"],
+    "last": ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Martinez", "Lopez", "Wilson", "Anderson", "Taylor", "Thomas", "Moore", "Martin", "Lee", "Thompson", "White", "Harris", "Clark", "Lewis", "Walker", "Hall", "Young", "King", "Wright", "Scott", "Green", "Baker", "Adams", "Nelson", "Carter", "Mitchell", "Turner", "Parker", "Collins", "Edwards", "Stewart", "Morris", "Rogers", "Reed", "Cook", "Morgan", "Bell", "Murphy", "Bailey", "Cooper", "Richardson", "Cox", "Howard", "Ward", "Torres", "Peterson", "Gray", "Ramirez", "James", "Watson", "Brooks", "Kelly"]
   },
   "ja": {
-    "first": ["Haruto", "Yui", "Sota", "Aoi", "Ren", "Hina", "Yuto", "Sakura"],
-    "last": ["Sato", "Suzuki", "Takahashi", "Tanaka", "Watanabe", "Ito", "Yamamoto", "Nakamura"]
+    "label": "Japanese (romaji)",
+    "first": ["Haruto", "Yui", "Sota", "Aoi", "Ren", "Hina", "Yuto", "Sakura", "Riku", "Hinata", "Yuna", "Kaito", "Mei", "Sora", "Rin", "Haruki", "Akari", "Daiki", "Miyu", "Kenta", "Nanami", "Takumi", "Yuki", "Kohaku", "Ayaka", "Shota", "Momoka", "Ryota"],
+    "last": ["Sato", "Suzuki", "Takahashi", "Tanaka", "Watanabe", "Ito", "Yamamoto", "Nakamura", "Kobayashi", "Kato", "Yoshida", "Yamada", "Sasaki", "Yamaguchi", "Matsumoto", "Inoue", "Kimura", "Hayashi", "Shimizu", "Yamazaki", "Mori", "Abe", "Ikeda", "Hashimoto", "Ishikawa", "Ogawa", "Maeda", "Fujita"]
   },
   "ko": {
-    "first": ["Minjun", "Seoyeon", "Jiho", "Haeun", "Doyun", "Jiwoo", "Siwoo", "Sua"],
-    "last": ["Kim", "Lee", "Park", "Choi", "Jung", "Kang", "Cho", "Yoon"]
+    "label": "Korean (romanized)",
+    "first": ["Minjun", "Seoyeon", "Jiho", "Haeun", "Doyun", "Jiwoo", "Siwoo", "Sua", "Yejun", "Chaewon", "Hajun", "Jiyu", "Junseo", "Yuna", "Eunwoo", "Seoah", "Hyunwoo", "Soyul", "Jiwon", "Dain", "Taeyang", "Hayun", "Seojun", "Yeju", "Wooju", "Nayeon", "Joon", "Ara"],
+    "last": ["Kim", "Lee", "Park", "Choi", "Jung", "Kang", "Cho", "Yoon", "Jang", "Lim", "Han", "Oh", "Seo", "Shin", "Kwon", "Hwang", "Ahn", "Song", "Ryu", "Hong", "Jeon", "Moon", "Yang", "Bae", "Baek", "Heo", "Nam", "Noh"]
   },
   "ar": {
-    "first": ["Omar", "Layla", "Youssef", "Fatima", "Ali", "Noor", "Hassan", "Amira"],
-    "last": ["Haddad", "Khalil", "Nasser", "Rahman", "Saleh", "Fares", "Amin", "Karim"]
+    "label": "Arabic (romanized)",
+    "first": ["Omar", "Layla", "Youssef", "Fatima", "Ali", "Noor", "Hassan", "Amira", "Ahmed", "Mariam", "Khalid", "Sara", "Ibrahim", "Hana", "Tariq", "Yasmin", "Karim", "Salma", "Bilal", "Dina", "Faisal", "Rania", "Mustafa", "Lina", "Sami", "Huda", "Adnan", "Zainab"],
+    "last": ["Haddad", "Khalil", "Nasser", "Rahman", "Saleh", "Fares", "Amin", "Karim", "Mansour", "Aziz", "Hamdan", "Sultan", "Farah", "Qasim", "Bakr", "Hakim", "Najjar", "Shadid", "Attar", "Sabbagh", "Darwish", "Ghanem", "Jaber", "Khoury", "Mahmoud", "Rashid", "Taha", "Zaki"]
+  },
+  "es": {
+    "label": "Spanish (MX / AR / ES)",
+    "first": ["Mateo", "Lucia", "Santiago", "Valentina", "Diego", "Camila", "Sebastian", "Isabella", "Alejandro", "Martina", "Andres", "Paula", "Carlos", "Daniela", "Javier", "Carmen", "Pablo", "Elena", "Miguel", "Sara", "Fernando", "Rocio", "Ricardo", "Marta"],
+    "last": ["Hernandez", "Rodriguez", "Gonzalez", "Fernandez", "Perez", "Sanchez", "Ramirez", "Torres", "Flores", "Rivera", "Gomez", "Diaz", "Cruz", "Morales", "Reyes", "Ortiz", "Jimenez", "Ruiz", "Alvarez", "Castillo", "Romero", "Vargas", "Mendoza", "Navarro"]
+  },
+  "pt": {
+    "label": "Portuguese (BR)",
+    "first": ["Joao", "Maria", "Pedro", "Ana", "Gabriel", "Beatriz", "Rafael", "Juliana", "Bruno", "Larissa", "Felipe", "Camila", "Thiago", "Leticia", "Gustavo", "Fernanda", "Rodrigo", "Amanda", "Vinicius", "Bianca", "Leonardo", "Carolina", "Matheus", "Isabela"],
+    "last": ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Nascimento", "Lima", "Araujo", "Ferreira", "Carvalho", "Gomes", "Martins", "Ribeiro", "Barbosa", "Rocha", "Dias", "Moreira", "Cardoso", "Teixeira", "Correia", "Monteiro"]
+  },
+  "de": {
+    "label": "German (DE)",
+    "first": ["Lukas", "Lena", "Jonas", "Hannah", "Leon", "Lea", "Paul", "Marie", "Maximilian", "Sophie", "Felix", "Laura", "Tim", "Sarah", "Jan", "Lisa", "Niklas", "Anna", "David", "Julia", "Moritz", "Katharina", "Tobias", "Nele"],
+    "last": ["Schmidt", "Schneider", "Fischer", "Weber", "Meyer", "Wagner", "Becker", "Schulz", "Hoffmann", "Koch", "Richter", "Klein", "Wolf", "Neumann", "Schwarz", "Zimmermann", "Braun", "Hartmann", "Lange", "Werner", "Krause", "Lehmann", "Huber", "Kaiser"]
+  },
+  "fr": {
+    "label": "French (FR)",
+    "first": ["Louis", "Camille", "Gabriel", "Manon", "Jules", "Chloe", "Arthur", "Emma", "Lucas", "Louise", "Hugo", "Alice", "Nathan", "Juliette", "Leo", "Ines", "Raphael", "Lea", "Adam", "Clara", "Paul", "Jade", "Antoine", "Margot"],
+    "last": ["Martin", "Bernard", "Dubois", "Thomas", "Robert", "Richard", "Petit", "Durand", "Leroy", "Moreau", "Simon", "Laurent", "Lefebvre", "Michel", "Garcia", "David", "Bertrand", "Roux", "Vincent", "Fournier", "Morel", "Girard", "Andre", "Mercier"]
+  },
+  "it": {
+    "label": "Italian (IT)",
+    "first": ["Francesco", "Giulia", "Alessandro", "Sofia", "Lorenzo", "Aurora", "Matteo", "Alice", "Leonardo", "Ginevra", "Andrea", "Emma", "Gabriele", "Giorgia", "Riccardo", "Chiara", "Tommaso", "Martina", "Edoardo", "Beatrice", "Marco", "Sara", "Davide", "Elena"],
+    "last": ["Rossi", "Russo", "Ferrari", "Esposito", "Bianchi", "Romano", "Colombo", "Ricci", "Marino", "Greco", "Bruno", "Gallo", "Conti", "Costa", "Giordano", "Mancini", "Rizzo", "Lombardi", "Moretti", "Barbieri", "Fontana", "Santoro", "Mariani", "Rinaldi"]
+  },
+  "nl": {
+    "label": "Dutch (NL)",
+    "first": ["Daan", "Emma", "Sem", "Julia", "Lucas", "Mila", "Levi", "Tess", "Finn", "Sophie", "Bram", "Zoe", "Milan", "Sara", "Luuk", "Eva", "Thijs", "Lotte", "Jesse", "Fleur", "Ruben", "Anna", "Sven", "Noor"],
+    "last": ["Jansen", "Bakker", "Visser", "Smit", "Meijer", "Mulder", "Bos", "Vos", "Peters", "Hendriks", "Dekker", "Brouwer", "Dijkstra", "Smits", "Kok", "Jacobs", "Vermeulen", "Willems", "Hoekstra", "Koster", "Prins", "Kuipers", "Blom", "Post"]
+  },
+  "hi": {
+    "label": "Indian (romanized)",
+    "first": ["Aarav", "Ananya", "Vivaan", "Diya", "Aditya", "Isha", "Arjun", "Priya", "Rohan", "Kavya", "Karan", "Neha", "Rahul", "Pooja", "Vikram", "Sneha", "Aman", "Riya", "Nikhil", "Meera", "Sahil", "Tanvi", "Rajesh", "Anjali"],
+    "last": ["Sharma", "Verma", "Gupta", "Patel", "Singh", "Kumar", "Reddy", "Nair", "Iyer", "Mehta", "Joshi", "Rao", "Desai", "Chauhan", "Malhotra", "Kapoor", "Mishra", "Pillai", "Bhat", "Saxena", "Menon", "Agarwal", "Banerjee", "Das"]
+  },
+  "zh": {
+    "label": "Chinese (pinyin, SG)",
+    "first": ["Wei", "Fang", "Jing", "Lei", "Min", "Hao", "Yan", "Jun", "Ling", "Tao", "Xin", "Yu", "Hui", "Bo", "Mei", "Qiang", "Li", "Ping", "Feng", "Na", "Jie", "Gang", "Ying", "Cheng"],
+    "last": ["Wang", "Li", "Zhang", "Liu", "Chen", "Yang", "Huang", "Zhao", "Wu", "Zhou", "Xu", "Sun", "Ma", "Zhu", "Hu", "Guo", "He", "Lin", "Gao", "Luo", "Zheng", "Liang", "Xie", "Tang"]
+  },
+  "he": {
+    "label": "Hebrew (romanized, IL)",
+    "first": ["Noam", "Noa", "Ariel", "Maya", "Yosef", "Tamar", "David", "Shira", "Itai", "Yael", "Daniel", "Talia", "Eitan", "Avigail", "Uri", "Michal", "Amit", "Roni", "Yonatan", "Adi", "Omer", "Lior", "Gal", "Hadas"],
+    "last": ["Cohen", "Levi", "Mizrahi", "Peretz", "Biton", "Dahan", "Avraham", "Friedman", "Malka", "Azulay", "Katz", "Yosef", "Amar", "Gabai", "Shapira", "Weiss", "Hadad", "Goldberg", "Aharoni", "Baruch", "Sasson", "Elbaz", "Segal", "Barak"]
+  },
+  "ng": {
+    "label": "Nigerian (NG)",
+    "first": ["Chidi", "Ngozi", "Emeka", "Adaeze", "Tunde", "Folake", "Obinna", "Chioma", "Segun", "Yemi", "Ifeanyi", "Amaka", "Kunle", "Bisi", "Uche", "Nneka", "Femi", "Titi", "Ikenna", "Zainab", "Musa", "Aisha", "Bola", "Dayo"],
+    "last": ["Okafor", "Adeyemi", "Okonkwo", "Balogun", "Eze", "Adebayo", "Nwachukwu", "Oyelaran", "Okoro", "Afolabi", "Chukwu", "Ogunleye", "Nnamdi", "Adekunle", "Obi", "Bello", "Abubakar", "Ibrahim", "Lawal", "Olawale", "Onyeka", "Yusuf", "Adamu", "Igwe"]
   },
   "stress": {
-    "first": ["José", "Zoë", "François", "Renée", "Søren", "Åsa"],
-    "last": ["O'Brien", "Smith-Jones", "Müller", "D'Angelo", "van der Berg", "Nuñez"]
+    "label": "Stress (validation-hostile, opt-in)",
+    "first": ["José", "Zoë", "François", "Renée", "Søren", "Åsa", "Jean-Luc", "Mary-Kate", "Anne-Sophie", "Chloé", "Björn", "Siobhán", "Łukasz", "Çağla", "Iñigo", "Émile", "Naïma", "Ólafur", "D'Arcy", "Mary Ann", "J", "André", "Léa", "Ayşe", "Nicolás", "Đorđe"],
+    "last": ["O'Brien", "Smith-Jones", "Müller", "D'Angelo", "van der Berg", "Nuñez", "O'Connor", "de la Cruz", "Da Silva", "St. John", "Şahin", "Nguyễn", "Björnsson", "Le Blanc", "Ó Súilleabháin", "Dvořák", "Løvstad", "García-López", "Al-Sayed", "Öztürk", "Kowalczyk-Nowak", "Fernández", "Ng", "Wolfeschlegelsteinhausenbergerdorff", "Van Dyke", "Đặng"]
   }
 }

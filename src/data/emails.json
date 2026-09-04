@@ -1,0 +1,4 @@
+{
+  "$comment": "Email local-part prefixes used when Options → Email style is 'random'. Each fill still appends the millisecond timestamp, so addresses stay unique; the prefix only makes test accounts look varied. Lowercase letters/digits only (tested) — the whole local part becomes a Mailinator inbox name and SFCC email regexes are strict.",
+  "prefixes": ["qa", "tester", "shopper", "buyer", "checkout", "guest", "customer", "order", "sandbox", "test", "demo", "trial", "cart", "pilot", "beta", "staging", "uat", "smoke", "regression", "verify", "signup", "returns", "loyalty", "wishlist"]
+}
