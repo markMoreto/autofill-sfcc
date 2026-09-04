@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildProfile } from './helpers.js';
+import { buildProfile, readJSON } from './helpers.js';
 import '../../src/lib/generator.js';
 
 const gen = globalThis.SFCCAF.generator;
@@ -13,6 +13,36 @@ describe('email generation', () => {
     // Mailinator maps the full local part to a public inbox; '+' would break
     // that (and several SFCC email validators reject it).
     expect(a.email.split('@')[0]).not.toContain('+');
+  });
+
+  it("style 'name' uses firstname.lastname of the generated identity, still timestamped", () => {
+    const p = buildProfile({ settings: { emailStyle: 'name' }, now: new Date(2026, 8, 5, 9, 30, 0, 7) });
+    const expected = `${p.firstName}.${p.lastName}`.toLowerCase();
+    expect(p.email).toBe(`${expected}-20260905-093000007@mailinator.com`);
+  });
+
+  it("style 'name' sanitizes stress names into a valid Mailinator local part", () => {
+    for (let i = 0; i < 60; i++) {
+      const p = buildProfile({ settings: { emailStyle: 'name', stressNames: true } });
+      expect(p.email, `${p.firstName} ${p.lastName}`).toMatch(/^[a-z0-9.]+-\d{8}-\d{9}@mailinator\.com$/);
+    }
+    expect(gen.emailSlug("José O'Brien")).toBe('joseobrien');
+    expect(gen.emailSlug('Anne-Sophie.van der Berg')).toBe('annesophie.vanderberg');
+    expect(gen.emailSlug('...')).toBe('');
+  });
+
+  it("style 'random' picks a prefix from emails.json; unknown style falls back to the fixed prefix", () => {
+    const { prefixes } = readJSON('src/data/emails.json');
+    const seen = new Set();
+    for (let i = 0; i < 80; i++) {
+      const p = buildProfile({ settings: { emailStyle: 'random' } });
+      const prefix = p.email.split('-')[0];
+      expect(prefixes).toContain(prefix);
+      seen.add(prefix);
+    }
+    expect(seen.size).toBeGreaterThan(5);
+    const q = buildProfile({ settings: { emailStyle: 'bogus', emailPrefix: 'team' } });
+    expect(q.email.startsWith('team-')).toBe(true);
   });
 });
 
@@ -58,6 +88,25 @@ describe('profile coherence', () => {
       expect(p.lastName).toMatch(/^[A-Za-z]+$/);
     }
   });
+
+  it('every selectable name pool yields ASCII-safe identities from that pool', () => {
+    const names = readJSON('src/data/names.json');
+    for (const [key, pool] of Object.entries(names)) {
+      if (key.startsWith('$') || key === 'stress') continue;
+      for (let i = 0; i < 10; i++) {
+        const p = buildProfile({ settings: { namePool: key } });
+        expect(pool.first, `${key}: ${p.firstName}`).toContain(p.firstName);
+        expect(pool.last, `${key}: ${p.lastName}`).toContain(p.lastName);
+        expect(p.firstName).toMatch(/^[A-Za-z]+$/);
+      }
+    }
+  });
+
+  it('an unknown pool key falls back to latin', () => {
+    const names = readJSON('src/data/names.json');
+    const p = buildProfile({ settings: { namePool: 'nope' } });
+    expect(names.latin.first).toContain(p.firstName);
+  });
 });
 
 describe('login scope', () => {
@@ -95,6 +144,21 @@ describe('cards', () => {
     const p = buildProfile({ settings: { vendor: 'applepay' } });
     expect(p.card).toBeNull();
     expect(p.cardInstructions).toMatch(/sandbox/i);
+  });
+
+  it('a card with a magic holderName (Worldpay REFUSED) overrides the identity as card holder only', () => {
+    const p = buildProfile({ settings: { vendor: 'worldpay', cardId: 'wp-refused' } });
+    expect(p.card.holder).toBe('REFUSED');
+    expect(p.card.expectedResult).toBe('declined');
+    expect(p.address.firstName).toBe(p.firstName); // address identity untouched
+    const q = buildProfile({ settings: { vendor: 'worldpay', cardId: 'wp-visa' } });
+    expect(q.card.holder).toBe(`${q.firstName} ${q.lastName}`);
+  });
+
+  it('passes 3ds-frictionless through as an expected result', () => {
+    const p = buildProfile({ settings: { vendor: 'stripe', cardId: 'stripe-3ds-frictionless' } });
+    expect(p.card.expectedResult).toBe('3ds-frictionless');
+    expect(p.card.number).toBe('4000000032200000');
   });
 
   it('derives the SFCC card type from the BIN', () => {

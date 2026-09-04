@@ -41,10 +41,38 @@
     return { firstName: first, lastName: last };
   }
 
+  // Lower-case ASCII letters/digits/dots only: the local part becomes a
+  // Mailinator inbox name and SFCC email regexes are strict. Diacritics are
+  // stripped (José → jose), everything else (apostrophes, spaces) removed.
+  function emailSlug(s) {
+    return String(s)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9.]+/g, '')
+      .replace(/^\.+|\.+$/g, '')
+      .replace(/\.{2,}/g, '.');
+  }
+
+  // Local-part prefix per Options → Email style:
+  //   prefix (default)  the configured emailPrefix ("qa")
+  //   name              firstname.lastname of this fill's identity
+  //   random            one of the bundled emails.json prefixes
+  function emailPrefix(settings, identity, emails) {
+    const fallback = settings.emailPrefix || 'qa';
+    if (settings.emailStyle === 'name') {
+      return emailSlug(`${identity.firstName}.${identity.lastName}`) || fallback;
+    }
+    if (settings.emailStyle === 'random' && emails && Array.isArray(emails.prefixes) && emails.prefixes.length) {
+      return pick(emails.prefixes);
+    }
+    return fallback;
+  }
+
   // Hyphen separator (not '+'): the whole local part becomes the Mailinator
   // inbox name, and several SFCC email validators reject '+' outright.
-  function makeEmail(settings, now) {
-    return `${settings.emailPrefix}-${timestamp(now)}@${settings.emailDomain}`;
+  function makeEmail(settings, identity, emails, now) {
+    return `${emailPrefix(settings, identity, emails)}-${timestamp(now)}@${settings.emailDomain}`;
   }
 
   function luhnValid(number) {
@@ -124,6 +152,7 @@
    *   addressRecord chosen record from addresses.json / custom addresses
    *   billingRecord optional distinct billing address (used when billingSameAsShipping is off)
    *   names         names.json content
+   *   emails        emails.json content (optional; only used by emailStyle 'random')
    *   cardsData     cards.json content
    *   phoneNumbers  { e164, national, nationalCompact } from SFCCAF.phone
    *   settings      resolved settings (see data.js defaults)
@@ -134,13 +163,14 @@
     generatePassword,
     luhnValid,
     cardBrandFromNumber,
+    emailSlug,
     buildProfile(args) {
-      const { countryMeta, addressRecord, billingRecord, names, cardsData, phoneNumbers, settings, now } = args;
+      const { countryMeta, addressRecord, billingRecord, names, emails, cardsData, phoneNumbers, settings, now } = args;
       const identity = makeIdentity(names, settings);
       const phone =
         settings.phoneFormat === 'e164' ? phoneNumbers.e164 : phoneNumbers.national;
 
-      let email = makeEmail(settings, now);
+      let email = makeEmail(settings, identity, emails, now);
       let password = settings.password || generatePassword();
       if (args.scope === 'login' && settings.lastRegistered) {
         email = settings.lastRegistered.email;
@@ -170,7 +200,9 @@
         billingSameAsShipping: !!settings.billingSameAsShipping,
         card: card
           ? {
-              holder: `${identity.firstName} ${identity.lastName}`,
+              // Some gateways trigger test outcomes from a magic holder name
+              // (Worldpay "REFUSED"); the card record wins over the identity.
+              holder: card.holderName || `${identity.firstName} ${identity.lastName}`,
               number: card.number,
               brand: card.brand,
               type: cardBrandFromNumber(card.number),

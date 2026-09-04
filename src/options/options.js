@@ -4,17 +4,31 @@
 const $ = (id) => document.getElementById(id);
 
 const DEFAULTS = {
-  emailPrefix: 'qa', emailDomain: 'mailinator.com', password: '', namePool: 'latin',
+  emailPrefix: 'qa', emailDomain: 'mailinator.com', emailStyle: 'prefix', password: '', namePool: 'latin',
   overrides: {}, customAddresses: {},
 };
 
+// Name pools come from names.json so adding a pool there is enough to list it here.
+async function populateNamePools() {
+  const sel = $('namePool');
+  if (sel.options.length) return;
+  const names = await (await fetch(chrome.runtime.getURL('src/data/names.json'))).json();
+  for (const [key, pool] of Object.entries(names)) {
+    if (key.startsWith('$') || key === 'stress' || !pool || !Array.isArray(pool.first)) continue;
+    sel.appendChild(new Option(pool.label || key, key));
+  }
+}
+
 async function load() {
+  await populateNamePools();
   const stored = await chrome.storage.local.get('settings');
   const s = Object.assign({}, DEFAULTS, stored.settings || {});
   $('emailPrefix').value = s.emailPrefix;
   $('emailDomain').value = s.emailDomain;
+  $('emailStyle').value = s.emailStyle;
   $('password').value = s.password;
   $('namePool').value = s.namePool;
+  if (!$('namePool').value) $('namePool').value = 'latin';
   $('overrides').value = JSON.stringify(s.overrides, null, 2);
   $('customAddresses').value = JSON.stringify(s.customAddresses, null, 2);
 }
@@ -67,6 +81,7 @@ async function save() {
   const settings = Object.assign({}, stored.settings, {
     emailPrefix: $('emailPrefix').value.trim() || 'qa',
     emailDomain: $('emailDomain').value.trim() || 'mailinator.com',
+    emailStyle: $('emailStyle').value,
     password: $('password').value,
     namePool: $('namePool').value,
     overrides,

@@ -10,6 +10,10 @@ const addressesData = readJSON('src/data/addresses.json');
 const namesData = readJSON('src/data/names.json');
 const cardsData = readJSON('src/data/cards.json');
 const phoneExamples = readJSON('src/data/phone-examples.json');
+const emailsData = readJSON('src/data/emails.json');
+
+const namePools = Object.entries(namesData).filter(([k]) => !k.startsWith('$'));
+const safePools = namePools.filter(([k]) => k !== 'stress');
 
 describe('countries.json', () => {
   it('has the curated country set with unique ISO codes', () => {
@@ -40,11 +44,35 @@ describe('countries.json', () => {
 });
 
 describe('addresses.json', () => {
-  it('every country has at least 2 candidate addresses', () => {
+  it('every country has at least 5 candidate addresses; the US (primary market) at least 20', () => {
     for (const c of countriesData.countries) {
       const list = addressesData.addresses[c.code];
       expect(list, `addresses for ${c.code}`).toBeDefined();
-      expect(list.length, `addresses for ${c.code}`).toBeGreaterThanOrEqual(2);
+      expect(list.length, `addresses for ${c.code}`).toBeGreaterThanOrEqual(5);
+    }
+    expect(addressesData.addresses.US.length).toBeGreaterThanOrEqual(20);
+    const total = Object.values(addressesData.addresses).reduce((n, l) => n + l.length, 0);
+    expect(total).toBeGreaterThanOrEqual(150);
+  });
+
+  it('the first US address stays Apple Park (fixtures and e2e assert on it)', () => {
+    expect(addressesData.addresses.US[0].address1).toBe('1 Apple Park Way');
+  });
+
+  it('every state on a record resolves through the country states map (code or name)', () => {
+    for (const c of countriesData.countries) {
+      const names = new Set(Object.values(c.states));
+      for (const a of addressesData.addresses[c.code]) {
+        if (!a.state) continue;
+        expect(c.states[a.state] !== undefined || names.has(a.state), `${a.id} state "${a.state}" not in ${c.code} states map`).toBe(true);
+      }
+    }
+  });
+
+  it('records only use the documented fields (custom-address docs list the schema)', () => {
+    const allowed = new Set(['id', 'label', 'address1', 'address2', 'city', 'state', 'postalCode', 'unicode', 'verified']);
+    for (const list of Object.values(addressesData.addresses)) {
+      for (const a of list) for (const key of Object.keys(a)) expect(allowed.has(key), `${a.id}.${key}`).toBe(true);
     }
   });
 
@@ -80,17 +108,40 @@ describe('addresses.json', () => {
 });
 
 describe('names.json', () => {
-  it('default pool has 40 first and 40 last ASCII-safe names', () => {
-    expect(namesData.latin.first.length).toBe(40);
-    expect(namesData.latin.last.length).toBe(40);
-    for (const n of [...namesData.latin.first, ...namesData.latin.last]) {
-      expect(n, n).toMatch(/^[A-Za-z]+$/); // no apostrophes/hyphens/diacritics by default
+  it('default (latin) pool has at least 60 first and 60 last names', () => {
+    expect(namesData.latin.first.length).toBeGreaterThanOrEqual(60);
+    expect(namesData.latin.last.length).toBeGreaterThanOrEqual(60);
+  });
+
+  it('ships at least 14 selectable pools, each labelled with ≥20 unique ASCII-safe first/last names', () => {
+    expect(safePools.length).toBeGreaterThanOrEqual(14);
+    for (const [key, pool] of safePools) {
+      expect(typeof pool.label, `${key}.label`).toBe('string');
+      for (const part of ['first', 'last']) {
+        expect(pool[part].length, `${key}.${part}`).toBeGreaterThanOrEqual(20);
+        expect(new Set(pool[part]).size, `${key}.${part} duplicates`).toBe(pool[part].length);
+        for (const n of pool[part]) expect(n, `${key}.${part}: ${n}`).toMatch(/^[A-Za-z]+$/); // no apostrophes/hyphens/diacritics/spaces
+      }
     }
   });
 
-  it('stress pool exists and contains validation-hostile names', () => {
-    const all = [...namesData.stress.first, ...namesData.stress.last].join('');
-    expect(/['\-]/.test(all) || /[^\x00-\x7F]/.test(all)).toBe(true);
+  it('stress pool has ≥20 first/last names and contains validation-hostile ones', () => {
+    expect(namesData.stress.first.length).toBeGreaterThanOrEqual(20);
+    expect(namesData.stress.last.length).toBeGreaterThanOrEqual(20);
+    const all = [...namesData.stress.first, ...namesData.stress.last];
+    expect(all.some((n) => /['\-]/.test(n))).toBe(true);        // apostrophes / hyphens
+    expect(all.some((n) => /[^\x00-\x7F]/.test(n))).toBe(true); // diacritics / non-Latin
+    expect(all.some((n) => /\s/.test(n))).toBe(true);           // spaces
+    expect(all.some((n) => n.length === 1)).toBe(true);         // single-letter
+    expect(all.some((n) => n.length >= 30)).toBe(true);         // maxlength stress
+  });
+});
+
+describe('emails.json', () => {
+  it('has ≥20 unique lowercase alphanumeric prefixes (valid Mailinator inbox names)', () => {
+    expect(emailsData.prefixes.length).toBeGreaterThanOrEqual(20);
+    expect(new Set(emailsData.prefixes).size).toBe(emailsData.prefixes.length);
+    for (const p of emailsData.prefixes) expect(p).toMatch(/^[a-z0-9]+$/);
   });
 });
 
@@ -110,6 +161,7 @@ describe('cards.json', () => {
   });
 
   it('every card number passes Luhn and has a CVV and expected result', () => {
+    const ids = new Set();
     for (const v of cardsData.vendors) {
       if (v.type === 'instructions') {
         expect(v.instructions, v.id).toBeTruthy();
@@ -118,10 +170,30 @@ describe('cards.json', () => {
       expect(v.cards.length, v.id).toBeGreaterThan(0);
       expect(v.cards.some((c) => c.expectedResult === 'approved'), v.id).toBe(true);
       for (const c of v.cards) {
+        expect(ids.has(c.id), `duplicate card id ${c.id}`).toBe(false);
+        ids.add(c.id);
+        expect(c.number, c.id).toMatch(/^\d{12,19}$/);
         expect(luhnValid(c.number), `${c.id} ${c.number}`).toBe(true);
         expect(c.cvv, c.id).toMatch(/^\d{3,4}$/);
-        expect(['approved', 'declined', '3ds-challenge', 'expired'], c.id).toContain(c.expectedResult);
+        expect(['approved', 'declined', '3ds-challenge', '3ds-frictionless', 'expired'], c.id).toContain(c.expectedResult);
+        expect(c.expiry && 'month' in c.expiry && 'year' in c.expiry, `${c.id} expiry`).toBe(true);
+        if (c.holderName !== undefined) expect(c.holderName, `${c.id} holderName`).toMatch(/^[A-Z0-9_ ]+$/);
       }
+    }
+  });
+
+  it('ships a broad choice of cards: ≥20 per major vendor, ≥150 overall, with error-state variants', () => {
+    const fillable = cardsData.vendors.filter((v) => v.type !== 'instructions');
+    const count = (id) => fillable.find((v) => v.id === id).cards.length;
+    for (const id of ['adyen', 'stripe', 'braintree', 'worldpay']) expect(count(id), id).toBeGreaterThanOrEqual(20);
+    expect(fillable.reduce((n, v) => n + v.cards.length, 0)).toBeGreaterThanOrEqual(150);
+    for (const id of ['adyen', 'stripe', 'braintree', 'worldpay', 'authorizenet']) {
+      const v = fillable.find((x) => x.id === id);
+      expect(v.cards.some((c) => c.expectedResult === 'declined'), `${id} declined variant`).toBe(true);
+    }
+    for (const id of ['adyen', 'stripe']) {
+      const v = fillable.find((x) => x.id === id);
+      expect(v.cards.some((c) => c.expectedResult.startsWith('3ds')), `${id} 3DS variant`).toBe(true);
     }
   });
 });

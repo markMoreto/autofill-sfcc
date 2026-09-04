@@ -28,6 +28,15 @@
       <p class="hint">Emails are generated as <code>prefix-YYYYMMDD-HHMMSSmmm@domain</code> — always unique.</p>
     </div>
     <div>
+      <label for="emailStyle">Email style</label>
+      <select id="emailStyle">
+        <option value="prefix">Fixed prefix (default)</option>
+        <option value="name">firstname.lastname of the generated identity</option>
+        <option value="random">Random prefix from the bundled pool (qa, shopper, guest…)</option>
+      </select>
+      <p class="hint">The timestamp is always appended, so every fill still gets a unique inbox.</p>
+    </div>
+    <div>
       <label for="emailDomain">Email domain</label>
       <input type="text" id="emailDomain">
       <p class="hint">
@@ -45,12 +54,8 @@
     </div>
     <div>
       <label for="namePool">Name pool</label>
-      <select id="namePool">
-        <option value="latin">Latin (default)</option>
-        <option value="ja">Japanese (romaji)</option>
-        <option value="ko">Korean (romanized)</option>
-        <option value="ar">Arabic (romanized)</option>
-      </select>
+      <select id="namePool"></select>
+      <p class="hint">Pools are listed from <code>src/data/names.json</code>; all are ASCII-safe. Stress names are a popup toggle.</p>
     </div>
   </div>
 
