@@ -1,180 +1,403 @@
 # SFCC QA Autofill
 
-A locally-installed browser extension that fills Salesforce B2C Commerce (SFCC) storefront
-forms in one action with realistic, validator-safe test data: names, complete addresses,
-phone numbers, unique emails, policy-safe passwords, and payment-vendor test cards.
+A browser extension that fills Salesforce B2C Commerce (SFCC) storefront forms in one click
+with realistic, validator-safe test data. Registration, login, address book, checkout
+shipping, billing, and payment forms are all covered.
 
-Supported storefront architectures, in priority order:
+- **Works on** SFRA, SiteGenesis, PWA Kit / Composable Storefront, and unknown storefronts
+  (via heuristics).
+- **Generates** unique emails, policy-safe passwords, names in 14 scripts, valid phone
+  numbers for 23 countries, 187 real public addresses, and 155 payment-vendor test cards.
+- **No build step, no accounts, no network calls.** Everything is bundled. You load the
+  folder straight into your browser.
 
-1. **SFRA** (Storefront Reference Architecture) — primary
-2. **SiteGenesis** (controllers and pipelines) — secondary
-3. **PWA Kit / Composable Storefront** (React, headless) — best-effort
-4. Anything else — scored generic heuristics (autocomplete attributes, field names, labels)
+> This tool is for **sandbox and development storefronts only**. Never run it against a
+> production site or with real customer data.
 
-No build step. No runtime network calls — all data is bundled. Not published to any store;
-distribution is "Load unpacked" only.
+---
 
-## Install
+## Table of contents
 
-**Chrome / Edge / Brave**
+1. [Quick start](#quick-start)
+2. [How to use it](#how-to-use-it)
+3. [What gets filled](#what-gets-filled)
+4. [Payment cards and hosted fields](#payment-cards-and-hosted-fields)
+5. [Configuration (Options page)](#configuration-options-page)
+6. [Troubleshooting](#troubleshooting)
+7. [Development](#development)
+8. [Project layout](#project-layout)
+9. [Known limitations](#known-limitations)
+10. [Tested on](#tested-on)
 
-1. Clone or download this folder.
-2. Open `chrome://extensions` (or `edge://extensions`).
-3. Enable **Developer mode** (top right).
-4. Click **Load unpacked** and select this repository's root folder (the one with `manifest.json`).
+---
+
+## Quick start
+
+### 1. Get the code
+
+```bash
+git clone https://github.com/markMoreto/autofill-sfcc.git
+```
+
+Or download the repository as a ZIP and unzip it. You do **not** need Node.js or `npm`
+to use the extension. They are only needed to run the tests (see [Development](#development)).
+
+### 2. Load the extension
+
+**Chrome, Edge, Brave, or any Chromium browser**
+
+1. Open `chrome://extensions` (Edge: `edge://extensions`).
+2. Turn on **Developer mode** (toggle in the top-right corner).
+3. Click **Load unpacked**.
+4. Select the repository folder. It is the one that contains `manifest.json`.
+5. Pin the extension to your toolbar so the icon is always visible.
 
 **Firefox (desktop)**
 
 1. Open `about:debugging#/runtime/this-firefox`.
-2. Click **Load Temporary Add-on…** and pick `manifest.json`.
-3. Temporary add-ons are removed on restart — reload after restarting Firefox.
+2. Click **Load Temporary Add-on…**.
+3. Select `manifest.json` inside the repository folder.
+
+Firefox removes temporary add-ons when it restarts. Repeat the steps above after each
+restart.
 
 **Firefox for Android**
 
-Works as a temporary add-on via [web-ext and adb](https://extensionworkshop.com/documentation/develop/developing-extensions-for-firefox-for-android/):
-`npx web-ext run -t firefox-android`.
+Follow Mozilla's guide to
+[running an extension on Firefox for Android](https://extensionworkshop.com/documentation/develop/developing-extensions-for-firefox-for-android/)
+with `web-ext` and `adb`, then run:
 
-> Tip: with `<all_urls>` the content script is registered on every site (it does zero work
-> until you trigger a fill). If you prefer, narrow `content_scripts[0].matches` and
-> `host_permissions` in `manifest.json` to your sandbox domains.
+```bash
+npx web-ext run -t firefox-android
+```
 
-## Use
+### 3. Fill your first form
 
-Three triggers, all sharing the same settings:
+1. Open a registration or checkout page on your sandbox storefront.
+2. Click the extension icon in the toolbar.
+3. Click **Fill everything**.
 
-| Trigger | How |
+The form fills in, the toolbar badge shows how many fields were filled, and the popup lists
+exactly what happened.
+
+---
+
+## How to use it
+
+### Three ways to trigger a fill
+
+| Trigger | How | Best for |
+|---|---|---|
+| **Toolbar popup** | Click the extension icon | Choosing country, address, card, and seeing results |
+| **Right-click menu** | Right-click the page → **SFCC Autofill** | Filling one section quickly (address by country, card by vendor, registration, login) |
+| **Keyboard shortcut** | `Ctrl+Shift+F` (Mac: `Cmd+Shift+F`) fills everything, `Ctrl+Shift+K` (Mac: `Cmd+Shift+K`) fills the card | Repeating a fill without touching the mouse |
+
+All three share the same settings. Change shortcuts at `chrome://extensions/shortcuts`.
+
+### The popup
+
+The popup has three parts:
+
+**Settings (top).** Pick the **country**, an **address** for that country, a **card
+vendor**, and a **card**. Choose a **profile** (registered or guest), a **phone format**
+(national or E.164), and whether **billing is the same as shipping**. Turn on
+**stress-test names** to get names like O'Brien, Müller, or Jean-Luc.
+
+**Actions (middle).**
+
+| Button | What it fills |
 |---|---|
-| Toolbar popup | Click the extension icon — full control panel + result/debug panel |
-| Context menu | Right-click the page → **SFCC Autofill** → Fill everything / address (per country) / card (per vendor) / registration / login |
-| Keyboard | `Ctrl/Cmd+Shift+F` fill everything · `Ctrl/Cmd+Shift+K` fill card (remap at `chrome://extensions/shortcuts`) |
+| **Fill everything** | Every field the extension can find on the page |
+| **Address** | Shipping address only, or billing too if "same as shipping" is off |
+| **Card** | Card number, expiry, CVV, and cardholder name |
+| **Registration** | Name, email, phone, and password. The credentials are saved. |
+| **Login** | The email and password from the most recent **Registration** fill |
 
-After a fill, the toolbar badge shows the filled-field count (green) or `!` (red) when
-expected fields could not be found. The popup's result panel lists every filled, skipped
-and unresolved field with the selector used — that panel is the debugging aid for building
-per-site overrides.
+**Results (bottom).** After a fill, the popup lists every field that was **filled**,
+**skipped**, or **unresolved**, together with the CSS selector it used. Filled card
+details appear with **Copy** buttons. When the email uses the default Mailinator domain,
+an **Inbox ↗** button opens the public inbox so you can read the storefront's
+registration or order emails.
 
-Notes on behavior:
+### Reading the badge
 
-- **Emails are always unique** (`qa-YYYYMMDD-HHMMSSmmm@mailinator.com` by default) so
-  registration never collides. Options → **Email style** switches the prefix to the
-  generated identity (`alex.smith-…`) or to a random entry from a bundled pool of 24
-  prefixes (`shopper-…`, `guest-…`); the timestamp is always appended. With the default Mailinator domain each address
-  is a **public inbox** — the popup's result panel shows an **Inbox ↗** button that opens
-  it, so you can read the storefront's registration/order emails. Public means anyone can
-  read them: sandbox data only; switch the domain in Options if your team has a private
-  catch-all.
-- **Fill registration** stores the generated credentials; **Fill login** replays the last
-  registered email/password.
-- **Billing same as shipping** checks the storefront's checkbox and skips billing address
-  fields (contact email/phone are still filled). Untick it to fill a distinct billing
-  address (the country's second bundled address).
-- Phone numbers are derived from libphonenumber's own example metadata — the trailing
-  digits are re-rolled per fill and re-validated by the library — so every fill gets a
-  different number that is valid for the selected country in both **national** and
-  **E.164** formats (US numbers stay in the fictional 555-01XX block).
-- Selecting a country in checkout waits (up to 1.5 s) for SFRA/SiteGenesis to reload the
-  state/province options before selecting the state.
+- A **green number** is the count of fields that were filled.
+- A **red `!`** means expected fields could not be found. Open the popup to see which
+  ones, then add a [per-site override](#per-site-selector-overrides) if needed.
 
-## Payment cards
+### A typical registration-then-login test
 
-`src/data/cards.json` bundles 150+ cards from each vendor's **public test documentation**
-(Adyen, Authorize.net, Stripe, Braintree/PayPal, Cybersource, Worldpay, Checkout.com):
-every brand the vendor documents (Visa/Mastercard/Amex/Discover/Diners/JCB/UnionPay/Maestro,
-regional schemes like Cartes Bancaires, Elo, Dankort), plus declined, expired,
-3DS-challenge and 3DS-frictionless variants for error-state testing. The popup groups a
-vendor's cards by expected outcome. Each entry carries the doc URL and the date it was
-last checked; Worldpay refusal cards work through a magic cardholder name (`REFUSED`,
-`REFUSED51`…) that the extension fills automatically.
+1. Go to the registration page and click **Registration**. Note the email in the popup.
+2. Submit the form. Click **Inbox ↗** to see the welcome email if your sandbox sends one.
+3. Log out, go to the login page, and click **Login**. The same credentials are replayed.
 
-**Hosted payment fields (iframes)** — Adyen Drop-in, Stripe Elements, Braintree Hosted
-Fields, Cybersource Flex, Checkout.com Frames render card inputs inside cross-origin
-iframes. The extension's content script runs inside those frames too and fills them
-best-effort (simulated per-character typing where vendors reject synthetic events). When
-a hardened frame still refuses, use the **Copy** buttons in the popup — the card details
-are always shown there after a fill.
+---
 
-**Apple Pay / Google Pay / Klarna** cannot be filled from a content script (native sheets
-/ external widgets). The popup shows the vendor's sandbox instructions instead; the
-extension still fills contact and shipping fields.
+## What gets filled
 
-## Countries and addresses
+| Data | How it is generated |
+|---|---|
+| **Names** | Random pick from a bundled pool. 14 ASCII-safe pools (Latin, Japanese, Korean, Arabic, Spanish, Portuguese, German, French, Italian, Dutch, Indian, Chinese, Hebrew, Nigerian) plus a stress pool. |
+| **Email** | Always unique. Default is `qa-YYYYMMDD-HHMMSSmmm@mailinator.com`. The prefix can be the generated name or a random word (see [Options](#configuration-options-page)). |
+| **Password** | A new policy-safe password each fill, or a fixed one you set in Options. |
+| **Phone** | A valid number for the selected country, derived from libphonenumber's example metadata and re-validated on every fill. US numbers stay in the fictional 555-01XX block. Available in national or E.164 format. |
+| **Address** | Real, public, deliverable places such as museums, landmarks, and government buildings. Never private residences. 23 countries, 187 addresses, at least 5 per country and 25 in the US spread across 20 states. |
+| **State / province** | Full lists for the US, Canada, Australia, and Germany. After selecting a country in checkout the extension waits up to 1.5 seconds for the state list to reload before selecting a state. |
+| **Card** | Public test cards from payment vendors' documentation. See the next section. |
 
-23 countries across North & South America, Europe, APAC, Middle East and Africa
-(`src/data/countries.json`). Each country ships ≥5 real, public, deliverable addresses
-(landmarks, museums, government buildings — never private residences) in
-`src/data/addresses.json` — 187 in total, 25 for the US spread across 20 states so
-state/province selects get exercised. The country metadata carries full state/province
-maps for the US, Canada, Australia and Germany.
+### Countries
 
-Addresses ship as **candidates** (`verified: null`) until someone runs the verification
-procedure in [scripts/verify-addresses.md](scripts/verify-addresses.md) against AvaTax
-and the Google Address Validation API and records the result. The popup marks verified
-addresses with ✓. The extension itself never calls those APIs.
+United States, Canada, Mexico, Brazil, Argentina, United Kingdom, Germany, France, Italy,
+Spain, Netherlands, Australia, New Zealand, Japan, South Korea, Singapore, India, United
+Arab Emirates, Saudi Arabia, Qatar, Israel, South Africa, Nigeria.
 
-## Options (per-team configuration)
+### Address verification status
 
-Open the extension's Options page for:
+Addresses ship as **candidates** (`verified: null`) until someone runs the procedure in
+[scripts/verify-addresses.md](scripts/verify-addresses.md) against AvaTax and the Google
+Address Validation API and records the result. Verified addresses show a ✓ in the popup.
+The extension itself never calls those APIs.
 
-- **Defaults**: email prefix/domain/style, fixed password (or per-fill generation), name
-  pool — 14 ASCII-safe pools (Latin, Japanese, Korean, Arabic, Spanish, Portuguese, German,
-  French, Italian, Dutch, Indian, Chinese, Hebrew, Nigerian) with 20–60 first and last
-  names each; the stress pool (O'Brien, Müller, Jean-Luc, 35-character surnames…) is a
-  popup toggle.
-- **Per-site selector overrides**: when a project renames fields, map hostname →
-  logical field → selector list. Easiest path: in the popup choose **Map a field**,
-  pick the logical name, click the input on the page — the override is saved for that
-  hostname automatically.
-- **Custom addresses**: project-specific validator-approved addresses per country; they
-  appear first in the popup.
-- **Export / Import**: share the whole settings object (JSON file) with your team.
+### Emails and privacy
+
+The default Mailinator domain gives you **public inboxes**. Anyone can read them, so use
+them for sandbox data only. If your team has a private catch-all domain, set it in Options.
+
+---
+
+## Payment cards and hosted fields
+
+### Bundled test cards
+
+[src/data/cards.json](src/data/cards.json) bundles 155 cards taken from each vendor's
+public test documentation. Every entry carries the documentation URL and the date it was
+last checked.
+
+| Vendor | Cards |
+|---|---|
+| Adyen | 39 |
+| Stripe | 36 |
+| Braintree / PayPal | 24 |
+| Worldpay | 23 |
+| Authorize.net | 16 |
+| Cybersource | 15 |
+| Checkout.com | 2 |
+
+Cards cover every brand the vendor documents (Visa, Mastercard, Amex, Discover, Diners,
+JCB, UnionPay, Maestro, and regional schemes such as Cartes Bancaires, Elo, and Dankort),
+plus **declined**, **expired**, **3DS challenge**, and **3DS frictionless** variants for
+testing error states. The popup groups each vendor's cards by expected outcome.
+
+Worldpay triggers refusals through a magic cardholder name such as `REFUSED` or
+`REFUSED51`. The extension fills that name automatically when you pick one of those cards.
+
+### Hosted payment fields (iframes)
+
+Adyen Drop-in, Stripe Elements, Braintree Hosted Fields, Cybersource Flex, and Checkout.com
+Frames render card inputs inside cross-origin iframes. The extension runs inside those
+frames too and fills them on a best-effort basis, simulating per-character typing where a
+vendor rejects synthetic events.
+
+If a hardened frame still refuses the fill, use the **Copy** buttons in the popup. The card
+details are always shown there after a fill.
+
+### Apple Pay, Google Pay, Klarna
+
+These use native payment sheets or external widgets that cannot be filled from a browser
+extension. The popup shows the vendor's sandbox instructions instead. Contact and shipping
+fields are still filled.
+
+---
+
+## Configuration (Options page)
+
+Open the Options page from the ⚙ button in the popup, or from the browser's extension
+management page.
+
+### Defaults
+
+- **Email prefix**, **email domain**, and **email style** (fixed prefix, generated name, or
+  a random word from a bundled pool). A timestamp is always appended so emails never
+  collide.
+- **Fixed password**. Leave empty to generate a new one on every fill.
+- **Name pool**. Which script the generated names come from.
+
+### Per-site selector overrides
+
+When a project renames its form fields, the extension may not find them. Map the field
+once and the override is saved for that hostname.
+
+The easy way, from the popup:
+
+1. Open the storefront page with the field that was not found.
+2. In the popup, choose the field's logical name from **Map a field…**.
+3. Click **Pick on page**, then click the input on the page.
+
+The override is stored automatically. You can also edit the overrides as JSON on the
+Options page, keyed by hostname, then logical field, then a list of selectors.
+
+### Custom addresses
+
+Add project-specific addresses that already passed your validator. Provide JSON keyed by
+ISO country code. Each record needs `id`, `label`, `address1`, `city`, `postalCode`, and
+`state` where the country uses one. Custom addresses appear first in the popup's address
+list.
+
+### Share settings with your team
+
+**Export JSON** downloads the whole settings object. Teammates use **Import JSON…** to load
+it. This is the simplest way to distribute overrides and custom addresses.
+
+---
+
+## Troubleshooting
+
+**The badge shows a red `!`.**
+Open the popup and expand the **unresolved** list. It names the fields the extension
+expected but could not find. Use **Map a field…** to point the extension at the right
+input.
+
+**Card fields inside an iframe stay empty.**
+The vendor hardened its frame. Use the **Copy** buttons in the popup and paste the values
+by hand. If this is a permanent change, see the maintenance guide on
+[patching a hosted iframe](docs/MAINTENANCE.md#when-a-payment-vendor-changes-its-hosted-iframe).
+
+**The state or province did not get selected.**
+The extension waits 1.5 seconds for the state list to reload after choosing a country.
+On a very slow sandbox, run **Address** a second time.
+
+**Phone validation fails on a non-US site.**
+SFRA's default phone validation is US-centric. The extension defaults to a compact national
+format that passes the default regex. Projects with custom validation can switch the
+**phone format** in the popup.
+
+**Nothing happens on Firefox after a restart.**
+Temporary add-ons are removed on restart. Load it again from `about:debugging`.
+
+**I only want the extension active on my sandbox domains.**
+By default the content script is registered on every site, though it does no work until you
+trigger a fill. To narrow it, edit `content_scripts[0].matches` and `host_permissions` in
+[manifest.json](manifest.json), then click **Reload** on the extensions page.
+
+---
 
 ## Development
 
-```bash
-npm install          # dev tooling only (vitest, playwright, react for tests)
-npm test             # 139 unit tests (jsdom): data schemas, generator, phones,
-                     # detection per platform, fill engine, React setter proof
-npx playwright install chromium
-npm run test:e2e     # loads the real unpacked extension into Chromium against fixtures
+### Prerequisites
 
-npm run vendor:phone # re-vendor libphonenumber-js after upgrading the dependency
-npm run icons        # regenerate icons
+- Node.js 18 or newer
+- A Chromium browser download for the end-to-end tests (installed by Playwright below)
+
+### Setup and tests
+
+```bash
+npm install                      # dev tooling only: vitest, playwright, react (for tests)
+npm test                         # 139 unit tests (jsdom)
+npx playwright install chromium  # one-time browser download
+npm run test:e2e                 # 4 end-to-end tests with the real unpacked extension
 ```
 
-Maintenance guides:
+The unit tests cover data schemas, the profile generator, phone numbers, field detection
+for each platform, the fill engine, and a real React controlled-input test that proves the
+PWA Kit path.
 
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — how the pieces fit together, message
-  contract, design decisions (read this first).
-- [docs/MAINTENANCE.md](docs/MAINTENANCE.md) — recipes: add a country, add/verify an
-  address, add or update a test card, patch selectors when a storefront or payment
-  vendor changes, add a hosted-frame vendor.
-- [scripts/verify-addresses.md](scripts/verify-addresses.md) — the owner-run address
-  verification procedure (AvaTax + Google Address Validation).
+The end-to-end suite loads the real extension into Chromium and fills the static fixtures
+in [test/fixtures/](test/fixtures/).
+
+### Other scripts
+
+```bash
+npm run vendor:phone   # re-vendor libphonenumber-js after upgrading the dependency
+npm run icons          # regenerate the extension icons
+```
+
+### Reloading after a change
+
+There is no build step. Edit the files, then click **Reload** on the browser's extensions
+page. On Firefox, reload the temporary add-on from `about:debugging`.
+
+### Guides
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). How the pieces fit together, the message
+  contract between popup, background, and content scripts, and the design decisions. Read
+  this first before changing anything structural.
+- [docs/MAINTENANCE.md](docs/MAINTENANCE.md). Step-by-step recipes: add a country, add or
+  verify an address, add or update a test card, patch selectors when a storefront or vendor
+  changes, add a hosted-frame vendor, and the release checklist.
+- [scripts/verify-addresses.md](scripts/verify-addresses.md). The address verification
+  procedure using AvaTax and the Google Address Validation API.
+
+### Contributing
+
+1. Keep `npm test` green on every commit.
+2. Prefer data changes over code changes. Selectors, addresses, cards, and names all live
+   in JSON under [src/data/](src/data/).
+3. When adding a test card, cite the vendor's public documentation URL and the date you
+   checked it.
+4. Never record an address as verified unless you actually ran the verification procedure.
+
+---
+
+## Project layout
+
+```
+manifest.json            Extension manifest (MV3, Chrome + Firefox)
+src/
+  background.js          Service worker: reads settings, generates the profile, sends FILL
+  content/
+    platform.js          Detects SFRA / SiteGenesis / PWA Kit / unknown
+    detect.js            Maps logical fields to inputs on the page
+    fill.js              Sets values safely (React-aware), handles selects and masks
+    frames.js            Fills card inputs inside vendor iframes
+    content.js           Message handling and result reporting
+  lib/
+    data.js              Default settings and data loading
+    generator.js         Builds a profile: name, email, password, address, card
+    phone.js             Phone numbers via the vendored libphonenumber
+  data/
+    countries.json       Country metadata and state/province lists
+    addresses.json       Public addresses per country
+    cards.json           Vendor test cards
+    names.json           Name pools
+    emails.json          Random email prefixes
+    selectors/           Selector maps per platform and for hosted iframes
+  popup/                 Toolbar popup
+  options/               Options page
+test/
+  unit/                  Vitest suites
+  e2e/                   Playwright suite
+  fixtures/              Static storefront pages used by both suites
+docs/                    Architecture and maintenance guides
+scripts/                 Icon and vendoring scripts, address verification procedure
+```
+
+---
 
 ## Known limitations
 
-- Hosted payment iframes are best-effort; vendors harden them regularly. The Copy-button
-  fallback always works. Patch `src/data/selectors/hosted.json` when a vendor changes.
-- Apple Pay / Google Pay flows cannot be automated from a content script (documented as
-  manual steps in the popup).
-- SFRA's default phone validation is US-centric; the extension defaults to compact
-  national format for non-US numbers, which passes the default regex. Projects with
-  custom phone validation can force a format via the popup toggle.
+- Hosted payment iframes are best-effort. Vendors harden them regularly. The Copy-button
+  fallback always works. Patch [src/data/selectors/hosted.json](src/data/selectors/hosted.json)
+  when a vendor changes.
+- Apple Pay, Google Pay, and Klarna cannot be automated from a content script.
+- SFRA's default phone validation is US-centric. See [Troubleshooting](#troubleshooting).
 - Address `verified` statuses are only as fresh as the last run of the verification
-  procedure (re-verify annually).
-- Firefox loads MV3 background as an event page (`background.scripts`); Chrome uses the
-  service worker. Both are driven by the same files — keep `src/background.js` stateless.
+  procedure. Re-verify yearly.
+- Firefox loads the background as an event page while Chrome uses a service worker. Both
+  run the same files, so keep [src/background.js](src/background.js) stateless.
+- The extension is not published to any store. Distribution is "Load unpacked" only.
+
+---
 
 ## Tested on
 
-| Page | SFRA fixture | SG fixture | PWA fixture | Real sandbox |
+| Page | SFRA fixture | SiteGenesis fixture | PWA Kit fixture | Real sandbox |
 |---|---|---|---|---|
-| Registration | ✅ unit+e2e | ✅ unit | — | ☐ owner to run §12.3 matrix |
+| Registration | ✅ unit + e2e | ✅ unit | — | ☐ |
 | Login | ✅ unit | ✅ unit | — | ☐ |
 | Address book | ✅ unit | ✅ unit | — | ☐ |
-| Checkout shipping | ✅ unit+e2e | ✅ unit+e2e | ✅ unit | ☐ |
+| Checkout shipping | ✅ unit + e2e | ✅ unit + e2e | ✅ unit | ☐ |
 | Checkout billing (same-as / distinct) | ✅ unit | ✅ unit | ✅ unit | ☐ |
-| Payment (native card form) | ✅ unit+e2e | ✅ unit | ✅ unit | ☐ |
+| Payment (native card form) | ✅ unit + e2e | ✅ unit | ✅ unit | ☐ |
 | Unknown platform (heuristics) | — | — | — | ✅ generic fixture e2e |
 
-Record real-sandbox results here as the manual matrix (plan §12.3) is executed.
+Record results in the "Real sandbox" column as you test against actual storefronts.
